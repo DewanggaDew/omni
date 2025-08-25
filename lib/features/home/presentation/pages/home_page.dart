@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:omni/features/transactions/presentation/widgets/transactions_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,33 +10,43 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('OMNI')),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Home'),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
+            Row(
               children: [
-                ElevatedButton(
-                  onPressed: () => context.go('/add'),
-                  child: const Text('Add'),
+                const Expanded(
+                  child: Text(
+                    'Home',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
                 ),
-                ElevatedButton(
+                IconButton(
                   onPressed: () => context.go('/analytics'),
-                  child: const Text('Analytics'),
+                  icon: const Icon(Icons.pie_chart_rounded),
+                  tooltip: 'Analytics',
                 ),
-                ElevatedButton(
+                IconButton(
                   onPressed: () => context.go('/goals'),
-                  child: const Text('Goals'),
+                  icon: const Icon(Icons.flag_rounded),
+                  tooltip: 'Goals',
                 ),
-                ElevatedButton(
+                IconButton(
                   onPressed: () => context.go('/groups'),
-                  child: const Text('Groups'),
+                  icon: const Icon(Icons.group_rounded),
+                  tooltip: 'Groups',
+                ),
+                IconButton(
+                  onPressed: () async => FirebaseAuth.instance.signOut(),
+                  icon: const Icon(Icons.logout),
+                  tooltip: 'Sign out',
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            const Expanded(child: TransactionsList()),
           ],
         ),
       ),
