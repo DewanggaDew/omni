@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "983688075775",
+    "project_id": "omni-9ece1",
+    "storage_bucket": "omni-9ece1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983688075775:android:fc456817477fae74b3afca",
+        "android_client_info": {
+          "package_name": "app.omni.omni"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIacXzeSii4-ynEJUgX7XCQxdi1Lx1PMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
