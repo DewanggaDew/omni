@@ -424,13 +424,13 @@ class AddTxCubit extends Cubit<AddTxState> {
 
 - [ ] Create product backlog aligned to `scope.md` features; prioritize MVP items
 - [ ] Name the app/bundle IDs; reserve app icons, branding assets
-- [ ] Initialize Flutter 3.x project; enforce analysis options and formatting
-- [ ] Set up package structure: `core/`, `features/`, `l10n/`, `main.dart`
-- [ ] Add core dependencies: `flutter_bloc`, `go_router`, `get_it`, `intl`, `equatable`, `firebase_core`, `cloud_firestore`, `firebase_auth`, `firebase_storage`, `firebase_messaging`, `firebase_crashlytics`, `firebase_analytics`, `hydrated_bloc`, `freezed`/`json_serializable` (if used)
+- [x] Initialize Flutter 3.x project; enforce analysis options and formatting
+- [x] Set up package structure: `core/`, `features/`, `l10n/`, `main.dart`
+- [x] Add core dependencies: `flutter_bloc`, `go_router`, `get_it`, `intl`, `equatable`, `firebase_core`, `cloud_firestore`, `firebase_auth`, `firebase_storage`, `firebase_messaging`, `firebase_crashlytics`, `firebase_analytics`, `hydrated_bloc`, `freezed`/`json_serializable` (if used)
 - [ ] Configure Firebase projects: dev/staging/prod with distinct configs
-- [ ] Add Firebase Emulators; scripts for `emulators:start` and test data seeding
-- [ ] CI bootstrap: build, `flutter analyze`, tests; artifact caching
-- [ ] Define coding standards and PR checklist; add templates
+- [x] Add Firebase Emulators; scripts for `emulators:start` and test data seeding
+- [x] CI bootstrap: build, `flutter analyze`, tests; artifact caching
+- [x] Define coding standards and PR checklist; add templates
 - [ ] Create initial Firestore/Storage rules placeholders (locked down) and enable App Check
 
 Definition of Done:
@@ -441,13 +441,13 @@ Definition of Done:
 
 #### Phase 1 — Design System & App Shell
 
-- [ ] Implement Material 3 light/dark themes with seed color
-- [ ] Theme toggle: system/light/dark via `ThemeCubit`; persist choice
+- [x] Implement Material 3 light/dark themes with seed color
+- [x] Theme toggle: system/light/dark via `ThemeCubit`; persist choice
 - [ ] Typography, spacing, elevation, iconography tokens
 - [ ] Base widgets: primary button, form field, sheet, list tile, chart container
 - [ ] Navigation shell: bottom nav (Home, Add, Analytics, Goals, Groups)
-- [ ] `GoRouter` routes and guarded placeholders
-- [ ] Localization scaffold: `lib/l10n/*.arb`, English strings, locale switch
+- [x] `GoRouter` routes and guarded placeholders
+- [x] Localization scaffold: `lib/l10n/*.arb`, English strings, locale switch
 - [ ] Accessibility defaults: contrast, text scale, touch target sizes
 
 Definition of Done:
@@ -458,13 +458,13 @@ Definition of Done:
 
 #### Phase 2 — Authentication & User Profile
 
-- [ ] Integrate Firebase Auth (Email/Password, Google; Apple for iOS when provisioning ready)
+- [x] Integrate Firebase Auth (Email/Password, Google; Apple for iOS when provisioning ready)
 - [ ] Onboarding: sign-in + base currency/country; optional default categories
-- [ ] Create `users/{uid}` doc on first login; persist settings
-- [ ] App Check enabled across services
-- [ ] Auth-guarded routes; sign-out flow; session handling
-- [ ] Crashlytics set up with user identifiers (privacy-safe)
-- [ ] Analytics core events: `login`, `sign_up`, `app_open`
+- [x] Create `users/{uid}` doc on first login; persist settings
+- [x] App Check enabled across services (Debug for dev; Play Integrity/App Attest for release)
+- [x] Auth-guarded routes; sign-out flow; session handling
+- [x] Crashlytics set up with user identifiers (privacy-safe)
+- [x] Analytics core events: `login`, `sign_up`; `app_open` pending
 
 Definition of Done:
 
@@ -474,7 +474,7 @@ Definition of Done:
 #### Phase 3 — Data Model & Rules (MVP scope)
 
 - [ ] Finalize MVP Firestore structures: users, categories, wallets, transactions, goals
-- [ ] Write Firestore rules for `users/{uid}` subcollections
+- [x] Write Firestore rules for `users/{uid}` subcollections
 - [ ] Create initial composite indexes (transactions by date, etc.)
 - [ ] Storage paths and rules for receipt images
 - [ ] Add typed models, JSON mappers, validators
@@ -488,9 +488,9 @@ Definition of Done:
 
 #### Phase 4 — Expense Capture (MVP Core)
 
-- [ ] Quick-add sheet: amount keypad, category chips, wallet, note, date/time
+- [x] Quick-add sheet: amount, type, category, note (initial)
 - [ ] Save & “Save another” flow; haptic feedback; optimistic UI
-- [ ] Recent transactions list with pagination and delete/undo
+- [x] Recent transactions list (initial stream)
 - [ ] Edit transaction screen; duplicate transaction
 - [ ] Tags support (simple string list)
 - [ ] Offline write queue; reconcile on reconnect

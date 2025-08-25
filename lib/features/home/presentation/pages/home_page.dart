@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:omni/features/transactions/presentation/widgets/transactions_list.dart';
+import 'package:omni/core/widgets/app_bottom_nav.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -24,17 +25,17 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => context.go('/analytics'),
+                  onPressed: () => context.push('/analytics'),
                   icon: const Icon(Icons.pie_chart_rounded),
                   tooltip: 'Analytics',
                 ),
                 IconButton(
-                  onPressed: () => context.go('/goals'),
+                  onPressed: () => context.push('/goals'),
                   icon: const Icon(Icons.flag_rounded),
                   tooltip: 'Goals',
                 ),
                 IconButton(
-                  onPressed: () => context.go('/groups'),
+                  onPressed: () => context.push('/groups'),
                   icon: const Icon(Icons.group_rounded),
                   tooltip: 'Groups',
                 ),
@@ -51,9 +52,10 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go('/add'),
+        onPressed: () => context.push('/add'),
         child: const Icon(Icons.add),
       ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omni/features/transactions/data/transactions_repository.dart';
+import 'package:omni/features/categories/data/categories_repository.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -13,7 +14,9 @@ class _AddPageState extends State<AddPage> {
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
   String _type = 'expense';
+  String? _categoryId;
   bool _loading = false;
+  bool _saveAndAddAnother = false;
 
   @override
   void dispose() {
@@ -32,11 +35,24 @@ class _AddPageState extends State<AddPage> {
         amountMinor: amountMinor,
         type: _type,
         date: DateTime.now(),
+        categoryId: _categoryId,
         note: _noteController.text.trim().isEmpty
             ? null
             : _noteController.text.trim(),
       );
-      if (mounted) Navigator.of(context).pop();
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Saved')));
+      if (_saveAndAddAnother) {
+        _amountController.clear();
+        _noteController.clear();
+        setState(() {
+          _type = 'expense';
+        });
+      } else {
+        Navigator.of(context).pop();
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -45,7 +61,13 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Transaction')),
+      appBar: AppBar(
+        title: const Text('Add Transaction'),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -80,19 +102,60 @@ class _AddPageState extends State<AddPage> {
                 decoration: const InputDecoration(labelText: 'Type'),
               ),
               const SizedBox(height: 12),
+              StreamBuilder<List<Map<String, dynamic>>>(
+                stream: CategoriesRepository().watchAll(),
+                builder: (context, snapshot) {
+                  final cats = snapshot.data ?? const [];
+                  return DropdownButtonFormField<String>(
+                    value: _categoryId,
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('No category'),
+                      ),
+                      ...cats.map(
+                        (c) => DropdownMenuItem(
+                          value: c['id'] as String,
+                          child: Text('${c['emoji'] ?? ''} ${c['name']}'),
+                        ),
+                      ),
+                    ],
+                    onChanged: (v) => setState(() => _categoryId = v),
+                    decoration: const InputDecoration(labelText: 'Category'),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _noteController,
                 decoration: const InputDecoration(labelText: 'Note (optional)'),
               ),
               const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _loading ? null : _save,
-                  child: _loading
-                      ? const CircularProgressIndicator()
-                      : const Text('Save'),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _loading ? null : _save,
+                      child: _loading
+                          ? const CircularProgressIndicator()
+                          : const Text('Save'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _loading
+                          ? null
+                          : () {
+                              setState(() => _saveAndAddAnother = true);
+                              _save().whenComplete(
+                                () => _saveAndAddAnother = false,
+                              );
+                            },
+                      child: const Text('Save & add another'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

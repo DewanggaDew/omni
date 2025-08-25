@@ -41,4 +41,19 @@ class TransactionsRepository {
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> delete({
+    required String id,
+    required Map<String, dynamic> backup,
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final doc = _txCol(uid).doc(id);
+    await doc.delete();
+    // Return backup to caller for potential undo.
+  }
+
+  Query<Map<String, dynamic>> buildLatestQuery({int limit = 20}) {
+    final uid = _auth.currentUser!.uid;
+    return _txCol(uid).orderBy('date', descending: true).limit(limit);
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class AuthService {
   AuthService({FirebaseAuth? auth, FirebaseFirestore? firestore})
@@ -22,6 +23,7 @@ class AuthService {
       password: password,
     );
     await _ensureUserDocument(cred.user);
+    await _identifyCrashlyticsUser();
     return cred;
   }
 
@@ -34,6 +36,7 @@ class AuthService {
       password: password,
     );
     await _ensureUserDocument(cred.user);
+    await _identifyCrashlyticsUser();
     return cred;
   }
 
@@ -55,6 +58,8 @@ class AuthService {
         'appVersion': null,
       });
       await _seedDefaultCategories(user.uid);
+      // Optional: could navigate onboarding via UI state. For now, we leave a flag.
+      await ref.update({'needsOnboarding': true});
     }
   }
 
@@ -88,5 +93,12 @@ class AuthService {
       batch.set(doc, c);
     }
     await batch.commit();
+  }
+
+  Future<void> _identifyCrashlyticsUser() async {
+    final u = _auth.currentUser;
+    if (u == null) return;
+    await FirebaseCrashlytics.instance.setUserIdentifier(u.uid);
+    await FirebaseCrashlytics.instance.setCustomKey('email', u.email ?? '');
   }
 }

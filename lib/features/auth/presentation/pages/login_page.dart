@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:omni/features/auth/data/auth_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,17 +31,20 @@ class _LoginPageState extends State<LoginPage> {
       _error = null;
     });
     try {
+      final analytics = FirebaseAnalytics.instance;
       final auth = AuthService();
       if (_isLogin) {
         await auth.signInWithEmail(
           email: _emailController.text,
           password: _passwordController.text,
         );
+        await analytics.logLogin(loginMethod: 'password');
       } else {
         await auth.signUpWithEmail(
           email: _emailController.text,
           password: _passwordController.text,
         );
+        await analytics.logSignUp(signUpMethod: 'password');
       }
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
