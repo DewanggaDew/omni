@@ -25,13 +25,13 @@ class AppCard extends StatelessWidget {
     return Container(
       margin: margin ?? const EdgeInsets.symmetric(vertical: AppTheme.space8),
       child: Material(
-        color: isDark ? AppTheme.charcoalBlack : AppTheme.pureWhite,
+        color: isDark ? AppTheme.charcoalBlack : AppTheme.offWhite,
         surfaceTintColor: Colors.transparent,
         borderRadius: BorderRadius.circular(AppTheme.radiusM),
-        elevation: elevation ?? (isDark ? 12 : 3),
+        elevation: elevation ?? (isDark ? 12 : 4),
         shadowColor: isDark
             ? AppTheme.deepBlack.withOpacity(0.8)
-            : AppTheme.deepBlack.withOpacity(0.08),
+            : AppTheme.deepBlack.withOpacity(0.12),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppTheme.radiusM),
@@ -50,7 +50,10 @@ class AppCard extends StatelessWidget {
                       color: AppTheme.darkGrey.withOpacity(0.3),
                       width: 0.5,
                     )
-                  : null,
+                  : Border.all(
+                      color: AppTheme.softGrey.withOpacity(0.15),
+                      width: 0.5,
+                    ),
             ),
             child: child,
           ),

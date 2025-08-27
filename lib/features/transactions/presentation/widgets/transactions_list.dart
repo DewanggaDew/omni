@@ -191,10 +191,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                 ),
               ),
               title: Text(
-                CurrencyFormatter.formatWithSign(
-                  amount,
-                  type == 'expense' ? '-' : '+',
-                ),
+                CurrencyFormatter.formatWithSign(amount, type),
                 style: theme.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: type == 'expense'

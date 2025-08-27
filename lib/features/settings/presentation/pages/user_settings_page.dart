@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:omni/core/theme/app_theme.dart';
 import 'package:omni/core/theme/theme_cubit.dart';
 import 'package:omni/core/utils/currency_formatter.dart';
@@ -31,11 +33,29 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     super.dispose();
   }
 
-  void _loadUserData() {
+  void _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       _displayNameController.text = user.displayName ?? '';
-      // TODO: Load currency preference from user settings
+
+      // Load currency preference from Firestore
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          final data = userDoc.data();
+          if (data != null && data['currency'] != null) {
+            setState(() {
+              _selectedCurrency = data['currency'] as String;
+            });
+          }
+        }
+      } catch (e) {
+        // Use default currency if loading fails
+      }
     }
   }
 
@@ -91,6 +111,29 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     }
   }
 
+  Future<void> _saveCurrencyPreference(String currency) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+        {'currency': currency},
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Currency updated successfully')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update currency: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -100,10 +143,19 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => context.go('/'),
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: theme.colorScheme.onSurface,
+          ),
+          tooltip: 'Back to Home',
+        ),
         title: Text(
           'Settings',
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -168,6 +220,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: AppTheme.space16),
@@ -208,13 +261,14 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                   user?.displayName ?? 'User',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: AppTheme.space4),
                 Text(
                   user?.email ?? '',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
                   ),
                 ),
               ],
@@ -402,7 +456,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                           title,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: titleColor,
+                            color: titleColor ?? theme.colorScheme.onSurface,
                           ),
                         ),
                         if (subtitle != null) ...[
@@ -411,7 +465,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                             subtitle,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface.withOpacity(
-                                0.6,
+                                0.7,
                               ),
                             ),
                           ),
@@ -436,7 +490,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
         selectedCurrency: _selectedCurrency,
         onCurrencySelected: (currency) {
           setState(() => _selectedCurrency = currency);
-          // TODO: Save currency preference
+          _saveCurrencyPreference(currency);
         },
       ),
     );
@@ -496,6 +550,7 @@ class _CurrencyPickerSheet extends StatelessWidget {
             'Select Currency',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: AppTheme.space24),
@@ -563,7 +618,7 @@ class _CurrencyPickerSheet extends StatelessWidget {
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: isSelected
                             ? AppTheme.vibrantBlue
-                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                            : theme.colorScheme.onSurface.withOpacity(0.7),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -586,7 +641,7 @@ class _CurrencyPickerSheet extends StatelessWidget {
                       Text(
                         currency['name']!,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -644,6 +699,7 @@ class _ThemeSelectorSheet extends StatelessWidget {
             'Theme',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: AppTheme.space24),
@@ -737,7 +793,7 @@ class _ThemeSelectorSheet extends StatelessWidget {
                   icon,
                   color: isSelected
                       ? AppTheme.vibrantBlue
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                      : theme.colorScheme.onSurface.withOpacity(0.7),
                   size: 20,
                 ),
               ),
@@ -760,7 +816,7 @@ class _ThemeSelectorSheet extends StatelessWidget {
                     Text(
                       subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                   ],
