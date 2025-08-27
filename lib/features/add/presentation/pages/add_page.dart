@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:omni/features/transactions/data/transactions_repository.dart';
 import 'package:omni/features/categories/data/categories_repository.dart';
+import 'package:omni/core/widgets/app_card.dart';
+import 'package:omni/core/theme/app_theme.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -17,6 +19,7 @@ class _AddPageState extends State<AddPage> {
   String? _categoryId;
   bool _loading = false;
   bool _saveAndAddAnother = false;
+  DateTime _date = DateTime.now();
 
   @override
   void dispose() {
@@ -34,7 +37,7 @@ class _AddPageState extends State<AddPage> {
       await repo.add(
         amountMinor: amountMinor,
         type: _type,
-        date: DateTime.now(),
+        date: _date,
         categoryId: _categoryId,
         note: _noteController.text.trim().isEmpty
             ? null
@@ -69,66 +72,115 @@ class _AddPageState extends State<AddPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppTheme.space24),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  labelText: 'Amount (e.g. 12.50)',
-                ),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Enter amount';
-                  final parsed = double.tryParse(v);
-                  if (parsed == null || parsed <= 0)
-                    return 'Enter valid amount';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                value: _type,
-                items: const [
-                  DropdownMenuItem(value: 'expense', child: Text('Expense')),
-                  DropdownMenuItem(value: 'income', child: Text('Income')),
-                ],
-                onChanged: (v) => setState(() => _type = v ?? 'expense'),
-                decoration: const InputDecoration(labelText: 'Type'),
-              ),
-              const SizedBox(height: 12),
-              StreamBuilder<List<Map<String, dynamic>>>(
-                stream: CategoriesRepository().watchAll(),
-                builder: (context, snapshot) {
-                  final cats = snapshot.data ?? const [];
-                  return DropdownButtonFormField<String>(
-                    value: _categoryId,
-                    items: [
-                      const DropdownMenuItem(
-                        value: null,
-                        child: Text('No category'),
+              AppCard(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _amountController,
+                      decoration: const InputDecoration(
+                        labelText: 'Amount (e.g. 12.50)',
                       ),
-                      ...cats.map(
-                        (c) => DropdownMenuItem(
-                          value: c['id'] as String,
-                          child: Text('${c['emoji'] ?? ''} ${c['name']}'),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Enter amount';
+                        final parsed = double.tryParse(v);
+                        if (parsed == null || parsed <= 0) {
+                          return 'Enter valid amount';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: AppTheme.space12),
+                    DropdownButtonFormField<String>(
+                      initialValue: _type,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'expense',
+                          child: Text('Expense'),
                         ),
+                        DropdownMenuItem(
+                          value: 'income',
+                          child: Text('Income'),
+                        ),
+                      ],
+                      onChanged: (v) => setState(() => _type = v ?? 'expense'),
+                      decoration: const InputDecoration(labelText: 'Type'),
+                    ),
+                    const SizedBox(height: AppTheme.space12),
+                    StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: CategoriesRepository().watchAll(),
+                      builder: (context, snapshot) {
+                        final cats = snapshot.data ?? const [];
+                        return DropdownButtonFormField<String>(
+                          initialValue: _categoryId,
+                          items: [
+                            const DropdownMenuItem(
+                              value: null,
+                              child: Text('No category'),
+                            ),
+                            ...cats.map(
+                              (c) => DropdownMenuItem(
+                                value: c['id'] as String,
+                                child: Text('${c['emoji'] ?? ''} ${c['name']}'),
+                              ),
+                            ),
+                          ],
+                          onChanged: (v) => setState(() => _categoryId = v),
+                          decoration: const InputDecoration(
+                            labelText: 'Category',
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: AppTheme.space12),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Date & time'),
+                      subtitle: Text('${_date.toLocal()}'),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () async {
+                          final d = await showDatePicker(
+                            context: context,
+                            initialDate: _date,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (d == null) return;
+                          final t = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(_date),
+                          );
+                          setState(() {
+                            final time = t ?? TimeOfDay.fromDateTime(_date);
+                            _date = DateTime(
+                              d.year,
+                              d.month,
+                              d.day,
+                              time.hour,
+                              time.minute,
+                            );
+                          });
+                        },
                       ),
-                    ],
-                    onChanged: (v) => setState(() => _categoryId = v),
-                    decoration: const InputDecoration(labelText: 'Category'),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _noteController,
-                decoration: const InputDecoration(labelText: 'Note (optional)'),
+                    ),
+                    const SizedBox(height: AppTheme.space12),
+                    TextFormField(
+                      controller: _noteController,
+                      decoration: const InputDecoration(
+                        labelText: 'Note (optional)',
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const Spacer(),
               Row(
@@ -141,7 +193,7 @@ class _AddPageState extends State<AddPage> {
                           : const Text('Save'),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppTheme.space12),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: _loading

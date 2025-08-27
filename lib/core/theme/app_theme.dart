@@ -1,25 +1,437 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
+  // Apple-inspired spacing system with refined hierarchy
+  static const double space2 = 2.0;
+  static const double space4 = 4.0;
+  static const double space6 = 6.0;
+  static const double space8 = 8.0;
+  static const double space12 = 12.0;
+  static const double space16 = 16.0;
+  static const double space20 = 20.0;
+  static const double space24 = 24.0;
+  static const double space28 = 28.0;
+  static const double space32 = 32.0;
+  static const double space40 = 40.0;
+  static const double space48 = 48.0;
+  static const double space64 = 64.0;
+  static const double space80 = 80.0;
+
+  // Border radius with Apple-like smoothness
+  static const double radiusXS = 6.0;
+  static const double radiusS = 10.0;
+  static const double radiusM = 14.0;
+  static const double radiusL = 18.0;
+  static const double radiusXL = 24.0;
+  static const double radiusXXL = 32.0;
+
+  // Elegant color palette
+  static const Color deepBlack = Color(0xFF000000);
+  static const Color richBlack = Color(0xFF0A0A0A);
+  static const Color charcoalBlack = Color(0xFF0F0F0F);
+  static const Color darkGrey = Color(0xFF1A1A1A);
+  static const Color mediumGrey = Color(0xFF2A2A2A);
+  static const Color lightGrey = Color(0xFF3A3A3A);
+  static const Color softGrey = Color(0xFF6A6A6A);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color offWhite = Color(0xFFF8F8F8);
+  static const Color lightTone = Color(0xFFF2F2F7);
+
+  // Accent colors for contrast
+  static const Color vibrantBlue = Color(0xFF007AFF);
+  static const Color emeraldGreen = Color(0xFF30D158);
+  static const Color warmRed = Color(0xFFFF3B30);
+  static const Color goldenYellow = Color(0xFFFFCC02);
+  static const Color richPurple = Color(0xFF5856D6);
+
   static ThemeData light() {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF111111),
+        seedColor: vibrantBlue,
         brightness: Brightness.light,
+        surface: offWhite,
+        onSurface: charcoalBlack,
+        primary: vibrantBlue,
+        onPrimary: pureWhite,
+        secondary: richPurple,
+        tertiary: emeraldGreen,
+        error: warmRed,
+        outline: softGrey,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      textTheme: _buildTextTheme(Brightness.light),
+      scaffoldBackgroundColor: pureWhite,
+      splashColor: vibrantBlue.withOpacity(0.08),
+      highlightColor: vibrantBlue.withOpacity(0.04),
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shadowColor: deepBlack.withOpacity(0.08),
+        surfaceTintColor: Colors.transparent,
+        color: pureWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: vibrantBlue,
+          foregroundColor: pureWhite,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: vibrantBlue,
+          foregroundColor: pureWhite,
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: vibrantBlue,
+          side: BorderSide(color: softGrey.withOpacity(0.3)),
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: pureWhite,
+        elevation: 8,
+        indicatorColor: vibrantBlue.withOpacity(0.1),
+        surfaceTintColor: Colors.transparent,
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final isSelected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: isSelected ? vibrantBlue : charcoalBlack.withOpacity(0.6),
+            size: 24,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final isSelected = states.contains(WidgetState.selected);
+          return TextStyle(
+            color: isSelected ? vibrantBlue : charcoalBlack.withOpacity(0.6),
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 12,
+          );
+        }),
+      ),
+      dividerTheme: DividerThemeData(
+        color: softGrey.withOpacity(0.2),
+        thickness: 0.5,
+        space: space16,
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: pureWhite,
+        surfaceTintColor: Colors.transparent,
+        elevation: 16,
+        shadowColor: deepBlack.withOpacity(0.12),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: pureWhite,
+        surfaceTintColor: Colors.transparent,
+        elevation: 24,
+        shadowColor: deepBlack.withOpacity(0.12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusL),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: offWhite,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+          borderSide: BorderSide(color: vibrantBlue, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: space16,
+          vertical: space16,
+        ),
+        hintStyle: TextStyle(color: charcoalBlack.withOpacity(0.5)),
+        labelStyle: TextStyle(color: charcoalBlack.withOpacity(0.7)),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        foregroundColor: charcoalBlack,
+        titleTextStyle: TextStyle(
+          color: charcoalBlack,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        iconTheme: IconThemeData(color: charcoalBlack, size: 24),
+      ),
     );
   }
 
   static ThemeData dark() {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF111111),
+        seedColor: vibrantBlue,
         brightness: Brightness.dark,
+        surface: charcoalBlack,
+        onSurface: lightTone,
+        primary: vibrantBlue,
+        onPrimary: pureWhite,
+        secondary: richPurple,
+        tertiary: emeraldGreen,
+        error: warmRed,
+        outline: softGrey,
+        surfaceVariant: darkGrey,
+        onSurfaceVariant: lightTone.withOpacity(0.8),
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      textTheme: _buildTextTheme(Brightness.dark),
+      scaffoldBackgroundColor: deepBlack,
+      splashColor: pureWhite.withOpacity(0.06),
+      highlightColor: pureWhite.withOpacity(0.03),
+      cardTheme: CardThemeData(
+        elevation: 8,
+        shadowColor: deepBlack.withOpacity(0.8),
+        surfaceTintColor: Colors.transparent,
+        color: charcoalBlack,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: vibrantBlue,
+          foregroundColor: pureWhite,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: vibrantBlue,
+          foregroundColor: pureWhite,
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: vibrantBlue,
+          side: BorderSide(color: darkGrey),
+          padding: const EdgeInsets.symmetric(
+            horizontal: space24,
+            vertical: space16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: richBlack,
+        elevation: 12,
+        indicatorColor: darkGrey,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final isSelected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: isSelected ? vibrantBlue : lightTone.withOpacity(0.6),
+            size: 24,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final isSelected = states.contains(WidgetState.selected);
+          return TextStyle(
+            color: isSelected ? vibrantBlue : lightTone.withOpacity(0.6),
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 12,
+          );
+        }),
+      ),
+      dividerTheme: DividerThemeData(
+        color: darkGrey,
+        thickness: 0.5,
+        space: space16,
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: charcoalBlack,
+        surfaceTintColor: Colors.transparent,
+        elevation: 24,
+        shadowColor: deepBlack.withOpacity(0.9),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: charcoalBlack,
+        surfaceTintColor: Colors.transparent,
+        elevation: 32,
+        shadowColor: deepBlack.withOpacity(0.9),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusL),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: darkGrey,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusM),
+          borderSide: BorderSide(color: vibrantBlue, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: space16,
+          vertical: space16,
+        ),
+        hintStyle: TextStyle(color: lightTone.withOpacity(0.5)),
+        labelStyle: TextStyle(color: lightTone.withOpacity(0.7)),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        foregroundColor: lightTone,
+        titleTextStyle: TextStyle(
+          color: lightTone,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        iconTheme: IconThemeData(color: lightTone, size: 24),
+      ),
+    );
+  }
+
+  static TextTheme _buildTextTheme(Brightness brightness) {
+    final baseColor = brightness == Brightness.light
+        ? charcoalBlack
+        : lightTone;
+
+    final subtleColor = brightness == Brightness.light
+        ? charcoalBlack.withOpacity(0.8)
+        : lightTone.withOpacity(0.8);
+
+    final secondaryColor = brightness == Brightness.light
+        ? charcoalBlack.withOpacity(0.6)
+        : lightTone.withOpacity(0.6);
+
+    final base = GoogleFonts.interTextTheme();
+
+    return base.copyWith(
+      // Large display text - for major headings
+      displayLarge: base.displayLarge?.copyWith(
+        fontSize: 36,
+        fontWeight: FontWeight.w700,
+        color: baseColor,
+        height: 1.1,
+        letterSpacing: -0.5,
+      ),
+      displayMedium: base.displayMedium?.copyWith(
+        fontSize: 30,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+        height: 1.15,
+        letterSpacing: -0.3,
+      ),
+      displaySmall: base.displaySmall?.copyWith(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+        height: 1.2,
+        letterSpacing: -0.2,
+      ),
+
+      // Headlines - for section headers
+      headlineLarge: base.headlineLarge?.copyWith(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+        height: 1.25,
+        letterSpacing: -0.1,
+      ),
+      headlineMedium: base.headlineMedium?.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: baseColor,
+        height: 1.3,
+        letterSpacing: 0,
+      ),
+
+      // Body text - for content
+      bodyLarge: base.bodyLarge?.copyWith(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+        color: baseColor,
+        height: 1.5,
+        letterSpacing: 0,
+      ),
+      bodyMedium: base.bodyMedium?.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: subtleColor,
+        height: 1.45,
+        letterSpacing: 0,
+      ),
+      bodySmall: base.bodySmall?.copyWith(
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: secondaryColor,
+        height: 1.4,
+        letterSpacing: 0.1,
+      ),
+
+      // Labels - for UI elements
+      labelLarge: base.labelLarge?.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        color: baseColor,
+        height: 1.3,
+        letterSpacing: 0.1,
+      ),
     );
   }
 }

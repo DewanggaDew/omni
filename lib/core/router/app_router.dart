@@ -11,6 +11,7 @@ import 'package:omni/features/auth/presentation/pages/login_page.dart';
 import 'package:omni/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:omni/features/goals/presentation/pages/goals_page.dart';
 import 'package:omni/features/groups/presentation/pages/groups_page.dart';
+import 'package:omni/features/settings/presentation/pages/user_settings_page.dart';
 
 GoRouter createRouter() {
   final session = UserSession();
@@ -23,6 +24,7 @@ GoRouter createRouter() {
       GoRoute(path: '/analytics', builder: (c, s) => const AnalyticsPage()),
       GoRoute(path: '/goals', builder: (c, s) => const GoalsPage()),
       GoRoute(path: '/groups', builder: (c, s) => const GroupsPage()),
+      GoRoute(path: '/settings', builder: (c, s) => const UserSettingsPage()),
     ],
     redirect: (context, state) {
       final loggedIn = FirebaseAuth.instance.currentUser != null;

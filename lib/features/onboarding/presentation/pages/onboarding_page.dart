@@ -35,6 +35,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
         'currency': _currency,
         'country': _country,
+        'needsOnboarding': false,
       });
       if (mounted) context.go('/');
     } finally {
@@ -54,7 +55,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DropdownButtonFormField<String>(
-                value: _currency,
+                initialValue: _currency,
                 items: const [
                   DropdownMenuItem(
                     value: 'IDR',

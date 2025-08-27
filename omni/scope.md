@@ -445,40 +445,40 @@ Definition of Done:
 - [x] Theme toggle: system/light/dark via `ThemeCubit`; persist choice
 - [ ] Typography, spacing, elevation, iconography tokens
 - [ ] Base widgets: primary button, form field, sheet, list tile, chart container
-- [ ] Navigation shell: bottom nav (Home, Add, Analytics, Goals, Groups)
+- [x] Navigation shell: bottom nav (Home, Add, Analytics, Goals, Groups)
 - [x] `GoRouter` routes and guarded placeholders
 - [x] Localization scaffold: `lib/l10n/*.arb`, English strings, locale switch
 - [ ] Accessibility defaults: contrast, text scale, touch target sizes
 
 Definition of Done:
 
-- [ ] Navigable shell with themed components in light/dark
-- [ ] Localization compiles with at least one ARB file
+- [x] Navigable shell with themed components in light/dark
+- [x] Localization compiles with at least one ARB file
 - [ ] Accessibility checks pass for base screens
 
 #### Phase 2 — Authentication & User Profile
 
 - [x] Integrate Firebase Auth (Email/Password, Google; Apple for iOS when provisioning ready)
-- [ ] Onboarding: sign-in + base currency/country; optional default categories
+- [x] Onboarding: sign-in + base currency/country; optional default categories
 - [x] Create `users/{uid}` doc on first login; persist settings
 - [x] App Check enabled across services (Debug for dev; Play Integrity/App Attest for release)
 - [x] Auth-guarded routes; sign-out flow; session handling
 - [x] Crashlytics set up with user identifiers (privacy-safe)
-- [x] Analytics core events: `login`, `sign_up`; `app_open` pending
+- [x] Analytics core events: `login`, `sign_up`, `app_open`
 
 Definition of Done:
 
-- [ ] Users can sign in/out; profile persisted with currency/country
-- [ ] Auth guards redirect properly; App Check enforced
+- [x] Users can sign in/out; profile persisted with currency/country
+- [x] Auth guards redirect properly; App Check enforced
 
 #### Phase 3 — Data Model & Rules (MVP scope)
 
 - [ ] Finalize MVP Firestore structures: users, categories, wallets, transactions, goals
 - [x] Write Firestore rules for `users/{uid}` subcollections
-- [ ] Create initial composite indexes (transactions by date, etc.)
-- [ ] Storage paths and rules for receipt images
+- [x] Create initial composite indexes (transactions by date, etc.)
+- [x] Storage paths and rules for receipt images
 - [ ] Add typed models, JSON mappers, validators
-- [ ] Repository interfaces + Firestore implementations (Transactions, Categories, Goals)
+- [x] Repository interfaces + Firestore implementations (Transactions, Categories)
 - [ ] Emulator tests for CRUD + security rules
 
 Definition of Done:
@@ -489,9 +489,9 @@ Definition of Done:
 #### Phase 4 — Expense Capture (MVP Core)
 
 - [x] Quick-add sheet: amount, type, category, note (initial)
-- [ ] Save & “Save another” flow; haptic feedback; optimistic UI
+- [x] Save & “Save another” flow (initial)
 - [x] Recent transactions list (initial stream)
-- [ ] Edit transaction screen; duplicate transaction
+- [x] Edit transaction screen; duplicate transaction
 - [ ] Tags support (simple string list)
 - [ ] Offline write queue; reconcile on reconnect
 - [ ] Unit/widget tests: add/edit/delete flows; time-to-add budget
