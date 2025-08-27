@@ -90,6 +90,9 @@ class _AddPageState extends State<AddPage> {
           _type = 'expense';
         });
       } else {
+        print(
+          'DEBUG: Add page - transaction saved successfully, returning true',
+        );
         Navigator.of(context).pop(true); // Return true to indicate success
       }
     } finally {
@@ -181,7 +184,7 @@ class _AddPageState extends State<AddPage> {
                           style: _buildTextStyle(context),
                           icon: Icon(
                             Icons.keyboard_arrow_down_rounded,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ),
@@ -221,7 +224,7 @@ class _AddPageState extends State<AddPage> {
                               style: _buildTextStyle(context),
                               icon: Icon(
                                 Icons.keyboard_arrow_down_rounded,
-                                color: theme.colorScheme.onSurface.withOpacity(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 
                                   0.6,
                                 ),
                               ),
@@ -264,7 +267,7 @@ class _AddPageState extends State<AddPage> {
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: theme.colorScheme.outline.withOpacity(
+                                color: theme.colorScheme.outline.withValues(alpha: 
                                   0.5,
                                 ),
                                 width: 1,
@@ -285,7 +288,7 @@ class _AddPageState extends State<AddPage> {
                                         style: theme.textTheme.bodySmall
                                             ?.copyWith(
                                               color: theme.colorScheme.onSurface
-                                                  .withOpacity(0.7),
+                                                  .withValues(alpha: 0.7),
                                               fontWeight: FontWeight.w500,
                                             ),
                                       ),
@@ -300,7 +303,7 @@ class _AddPageState extends State<AddPage> {
                                 Icon(
                                   Icons.calendar_today_rounded,
                                   color: theme.colorScheme.onSurface
-                                      .withOpacity(0.6),
+                                      .withValues(alpha: 0.6),
                                   size: 20,
                                 ),
                               ],
@@ -339,7 +342,7 @@ class _AddPageState extends State<AddPage> {
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: theme.colorScheme.onPrimary,
                           disabledBackgroundColor: theme.colorScheme.primary
-                              .withOpacity(0.6),
+                              .withValues(alpha: 0.6),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -384,9 +387,9 @@ class _AddPageState extends State<AddPage> {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: theme.colorScheme.primary,
                           disabledForegroundColor: theme.colorScheme.primary
-                              .withOpacity(0.6),
+                              .withValues(alpha: 0.6),
                           side: BorderSide(
-                            color: theme.colorScheme.primary.withOpacity(
+                            color: theme.colorScheme.primary.withValues(alpha: 
                               _loading ? 0.3 : 0.6,
                             ),
                             width: 1.5,
@@ -403,7 +406,7 @@ class _AddPageState extends State<AddPage> {
                             Icon(
                               Icons.add_rounded,
                               size: 20,
-                              color: theme.colorScheme.primary.withOpacity(
+                              color: theme.colorScheme.primary.withValues(alpha: 
                                 _loading ? 0.6 : 1.0,
                               ),
                             ),
@@ -412,7 +415,7 @@ class _AddPageState extends State<AddPage> {
                               'Save & Add Another',
                               style: theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.primary.withOpacity(
+                                color: theme.colorScheme.primary.withValues(alpha: 
                                   _loading ? 0.6 : 1.0,
                                 ),
                                 fontSize: 15,
@@ -450,22 +453,22 @@ class _AddPageState extends State<AddPage> {
       labelText: label,
       hintText: hint,
       labelStyle: theme.textTheme.bodyMedium?.copyWith(
-        color: theme.colorScheme.onSurface.withOpacity(0.7),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
         fontWeight: FontWeight.w500,
       ),
       hintStyle: theme.textTheme.bodyMedium?.copyWith(
-        color: theme.colorScheme.onSurface.withOpacity(0.5),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppTheme.radiusS),
         borderSide: BorderSide(
-          color: theme.colorScheme.outline.withOpacity(0.5),
+          color: theme.colorScheme.outline.withValues(alpha: 0.5),
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppTheme.radiusS),
         borderSide: BorderSide(
-          color: theme.colorScheme.outline.withOpacity(0.5),
+          color: theme.colorScheme.outline.withValues(alpha: 0.5),
         ),
       ),
       focusedBorder: OutlineInputBorder(

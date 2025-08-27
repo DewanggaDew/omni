@@ -27,8 +27,6 @@ class _HomeHeaderState extends State<HomeHeader> {
   void initState() {
     super.initState();
     _loadSummaryData();
-
-    // Register the refresh callback with the parent
     widget.onRefreshCallbackReady?.call(refresh);
   }
 
@@ -141,23 +139,23 @@ class _HomeHeaderState extends State<HomeHeader> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              theme.colorScheme.primary.withOpacity(0.05),
+              theme.colorScheme.primary.withValues(alpha: 0.05),
               theme.colorScheme.surface,
             ],
           ),
           boxShadow: [
             BoxShadow(
               color: isDark
-                  ? AppTheme.deepBlack.withOpacity(0.6)
-                  : AppTheme.deepBlack.withOpacity(0.08),
+                  ? AppTheme.deepBlack.withValues(alpha: 0.6)
+                  : AppTheme.deepBlack.withValues(alpha: 0.08),
               blurRadius: 24,
               spreadRadius: 0,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
               color: isDark
-                  ? AppTheme.deepBlack.withOpacity(0.3)
-                  : AppTheme.deepBlack.withOpacity(0.04),
+                  ? AppTheme.deepBlack.withValues(alpha: 0.3)
+                  : AppTheme.deepBlack.withValues(alpha: 0.04),
               blurRadius: 48,
               spreadRadius: 0,
               offset: const Offset(0, 16),
@@ -176,7 +174,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                       Text(
                         'Good ${_getTimeGreeting()}',
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
+                          ),
                           fontWeight: FontWeight.w400,
                           letterSpacing: 0.2,
                         ),
@@ -202,7 +202,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                             : AppTheme.offWhite,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: theme.colorScheme.outline.withOpacity(0.1),
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.1,
+                          ),
                         ),
                       ),
                       child: IconButton(
@@ -211,7 +213,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                           isDark
                               ? Icons.light_mode_rounded
                               : Icons.dark_mode_rounded,
-                          color: theme.colorScheme.onSurface.withOpacity(0.8),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.8,
+                          ),
                         ),
                         iconSize: 20,
                         tooltip: 'Change theme',
@@ -225,7 +229,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                             : AppTheme.offWhite,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: theme.colorScheme.outline.withOpacity(0.1),
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.1,
+                          ),
                         ),
                       ),
                       child: IconButton(
@@ -272,7 +278,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -434,18 +442,18 @@ class _SummaryCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            color.withOpacity(isDark ? 0.15 : 0.08),
-            color.withOpacity(isDark ? 0.08 : 0.04),
+            color.withValues(alpha: isDark ? 0.15 : 0.08),
+            color.withValues(alpha: isDark ? 0.08 : 0.04),
           ],
         ),
         borderRadius: BorderRadius.circular(AppTheme.radiusL),
         border: Border.all(
-          color: color.withOpacity(isDark ? 0.25 : 0.15),
+          color: color.withValues(alpha: isDark ? 0.25 : 0.15),
           width: 0.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(isDark ? 0.1 : 0.06),
+            color: color.withValues(alpha: isDark ? 0.1 : 0.06),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -457,7 +465,7 @@ class _SummaryCard extends StatelessWidget {
           Text(
             title,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
               letterSpacing: 0.3,
             ),
@@ -477,7 +485,7 @@ class _SummaryCard extends StatelessWidget {
           Text(
             subtitle,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -524,8 +532,8 @@ class _ThemeOption extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: Border.all(
                 color: isSelected
-                    ? AppTheme.vibrantBlue.withOpacity(0.3)
-                    : theme.colorScheme.outline.withOpacity(0.1),
+                    ? AppTheme.vibrantBlue.withValues(alpha: 0.3)
+                    : theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
             child: Row(
@@ -534,15 +542,15 @@ class _ThemeOption extends StatelessWidget {
                   padding: const EdgeInsets.all(AppTheme.space8),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.vibrantBlue.withOpacity(0.1)
-                        : theme.colorScheme.outline.withOpacity(0.1),
+                        ? AppTheme.vibrantBlue.withValues(alpha: 0.1)
+                        : theme.colorScheme.outline.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusS),
                   ),
                   child: Icon(
                     icon,
                     color: isSelected
                         ? AppTheme.vibrantBlue
-                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     size: 20,
                   ),
                 ),
@@ -559,13 +567,17 @@ class _ThemeOption extends StatelessWidget {
                               : FontWeight.w500,
                           color: isSelected
                               ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onSurface.withOpacity(0.8),
+                              : theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.8,
+                                ),
                         ),
                       ),
                       Text(
                         subtitle,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
+                          ),
                         ),
                       ),
                     ],

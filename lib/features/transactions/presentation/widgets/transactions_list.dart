@@ -8,20 +8,32 @@ import 'package:omni/core/utils/currency_formatter.dart';
 import 'package:omni/core/services/currency_exchange_service.dart';
 
 class TransactionsList extends StatelessWidget {
-  const TransactionsList({super.key});
+  const TransactionsList({super.key, this.onRefreshCallbackReady});
+
+  final ValueChanged<VoidCallback>? onRefreshCallbackReady;
 
   @override
   Widget build(BuildContext context) {
     final repo = TransactionsRepository();
     Query<Map<String, dynamic>> query = repo.buildLatestQuery(limit: 20);
-    return _PagedTransactionsList(query: query, repo: repo);
+    return _PagedTransactionsList(
+      query: query,
+      repo: repo,
+      onRefreshCallbackReady: onRefreshCallbackReady,
+    );
   }
 }
 
 class _PagedTransactionsList extends StatefulWidget {
-  const _PagedTransactionsList({required this.query, required this.repo});
+  const _PagedTransactionsList({
+    required this.query,
+    required this.repo,
+    this.onRefreshCallbackReady,
+  });
+
   final Query<Map<String, dynamic>> query;
   final TransactionsRepository repo;
+  final ValueChanged<VoidCallback>? onRefreshCallbackReady;
 
   @override
   State<_PagedTransactionsList> createState() => _PagedTransactionsListState();
@@ -132,13 +144,13 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
             Icon(
               Icons.receipt_long_outlined,
               size: 48,
-              color: theme.colorScheme.outline.withOpacity(0.5),
+              color: theme.colorScheme.outline.withValues(alpha: 0.5),
             ),
             const SizedBox(height: AppTheme.space16),
             Text(
               'No transactions yet',
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: AppTheme.space8),
@@ -164,7 +176,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
         itemCount: _docs.length,
         separatorBuilder: (_, __) => Divider(
           height: 1,
-          color: theme.colorScheme.outline.withOpacity(0.1),
+          color: theme.colorScheme.outline.withValues(alpha: 0.1),
         ),
         itemBuilder: (context, index) {
           final tx = _docs[index].data();
@@ -186,7 +198,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
           return Dismissible(
             key: ValueKey(_docs[index].id),
             background: Container(
-              color: theme.colorScheme.error.withOpacity(0.1),
+              color: theme.colorScheme.error.withValues(alpha: 0.1),
               alignment: Alignment.centerRight,
               padding: const EdgeInsets.only(right: AppTheme.space24),
               child: Icon(Icons.delete_outline, color: theme.colorScheme.error),
@@ -206,14 +218,14 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                       (type == 'expense'
                               ? AppTheme.warmRed
                               : AppTheme.emeraldGreen)
-                          .withOpacity(0.12),
+                          .withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(AppTheme.radiusM),
                   border: Border.all(
                     color:
                         (type == 'expense'
                                 ? AppTheme.warmRed
                                 : AppTheme.emeraldGreen)
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
@@ -248,7 +260,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                     Text(
                       'Originally: ${CurrencyFormatter.formatWithSign(amount, type, currencyCode: transactionCurrency)}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                         fontStyle: FontStyle.italic,
                       ),
                     ),

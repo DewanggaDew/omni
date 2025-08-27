@@ -15,14 +15,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  VoidCallback? _refreshCallback;
+  VoidCallback? _homeHeaderRefreshCallback;
+  VoidCallback? _transactionsListRefreshCallback;
 
   Future<void> _navigateToAddTransaction() async {
+    print('DEBUG: Navigating to add transaction page');
     final result = await context.push('/add');
+    print('DEBUG: Returned from add page with result: $result');
 
-    // If a transaction was successfully added, refresh the home page
+    // If a transaction was successfully added, refresh both the header and transactions list
     if (result == true && mounted) {
-      _refreshCallback?.call();
+      print('DEBUG: Calling refresh callbacks');
+      _homeHeaderRefreshCallback?.call();
+      _transactionsListRefreshCallback?.call();
+    } else {
+      print(
+        'DEBUG: No refresh needed. Result: $result, Mounted: $mounted, HasHeaderCallback: ${_homeHeaderRefreshCallback != null}, HasListCallback: ${_transactionsListRefreshCallback != null}',
+      );
     }
   }
 
@@ -37,7 +46,8 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: HomeHeader(
               onRefreshCallbackReady: (callback) {
-                _refreshCallback = callback;
+                print('DEBUG: HomePage received HomeHeader refresh callback');
+                _homeHeaderRefreshCallback = callback;
               },
             ),
           ),
@@ -76,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'Your latest financial activity',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -87,10 +97,14 @@ class _HomePageState extends State<HomePage> {
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.space24),
-            sliver: const SliverToBoxAdapter(
+            sliver: SliverToBoxAdapter(
               child: AppCard(
                 padding: EdgeInsets.zero,
-                child: TransactionsList(),
+                child: TransactionsList(
+                  onRefreshCallbackReady: (callback) {
+                    _transactionsListRefreshCallback = callback;
+                  },
+                ),
               ),
             ),
           ),
@@ -102,13 +116,13 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(AppTheme.radiusL),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.vibrantBlue.withOpacity(0.4),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.4),
               blurRadius: 20,
               spreadRadius: 0,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: AppTheme.vibrantBlue.withOpacity(0.2),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.4),
               blurRadius: 40,
               spreadRadius: 0,
               offset: const Offset(0, 16),

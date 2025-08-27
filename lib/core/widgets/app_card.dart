@@ -30,24 +30,24 @@ class AppCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppTheme.radiusM),
         elevation: elevation ?? (isDark ? 12 : 4),
         shadowColor: isDark
-            ? AppTheme.deepBlack.withOpacity(0.8)
-            : AppTheme.deepBlack.withOpacity(0.12),
+            ? AppTheme.deepBlack.withValues(alpha: 0.8)
+            : AppTheme.deepBlack.withValues(alpha: 0.12),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppTheme.radiusM),
           splashColor: isDark
-              ? AppTheme.pureWhite.withOpacity(0.06)
-              : AppTheme.vibrantBlue.withOpacity(0.08),
+              ? AppTheme.pureWhite.withValues(alpha: 0.06)
+              : AppTheme.vibrantBlue.withValues(alpha: 0.08),
           highlightColor: isDark
-              ? AppTheme.pureWhite.withOpacity(0.03)
-              : AppTheme.vibrantBlue.withOpacity(0.04),
+              ? AppTheme.pureWhite.withValues(alpha: 0.03)
+              : AppTheme.vibrantBlue.withValues(alpha: 0.04),
           child: Container(
             padding: padding ?? const EdgeInsets.all(AppTheme.space16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: isDark
                   ? Border.all(
-                      color: AppTheme.darkGrey.withOpacity(0.3),
+                      color: AppTheme.darkGrey.withValues(alpha: 0.3),
                       width: 0.5,
                     )
                   : null,
