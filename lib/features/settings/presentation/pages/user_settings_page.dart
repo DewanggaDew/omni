@@ -554,11 +554,22 @@ class _CurrencyPickerSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppTheme.space24),
-          ...currencies.map(
-            (currency) => _buildCurrencyOption(
-              context,
-              currency,
-              selectedCurrency == currency['code'],
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: currencies
+                    .map(
+                      (currency) => _buildCurrencyOption(
+                        context,
+                        currency,
+                        selectedCurrency == currency['code'],
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           ),
           SizedBox(

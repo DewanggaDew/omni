@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:omni/features/transactions/data/transactions_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:omni/features/transactions/presentation/pages/transaction_detail_page.dart';
 import 'package:omni/core/theme/app_theme.dart';
 import 'package:omni/core/utils/currency_formatter.dart';
+import 'package:omni/core/services/currency_exchange_service.dart';
 
 class TransactionsList extends StatelessWidget {
   const TransactionsList({super.key});
@@ -30,11 +32,36 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
   bool _loading = true;
   bool _loadingMore = false;
   bool _hasMore = true;
+  String _userCurrency = 'IDR';
 
   @override
   void initState() {
     super.initState();
+    _loadUserCurrency();
     _load();
+  }
+
+  Future<void> _loadUserCurrency() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          final data = userDoc.data();
+          if (data != null && data['currency'] != null) {
+            setState(() {
+              _userCurrency = data['currency'] as String;
+            });
+          }
+        }
+      } catch (e) {
+        debugPrint('Failed to load user currency: $e');
+      }
+    }
   }
 
   Future<void> _load() async {
@@ -145,6 +172,16 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
           final type = (tx['type'] as String?) ?? 'expense';
           final note = (tx['note'] as String?) ?? '';
           final date = tx['date'] as Timestamp?;
+          final transactionCurrency = (tx['currency'] as String?) ?? 'IDR';
+
+          // Convert amount if currencies differ
+          final displayAmount = transactionCurrency != _userCurrency
+              ? CurrencyExchangeService.convert(
+                  amountMinor: amount,
+                  fromCurrency: transactionCurrency,
+                  toCurrency: _userCurrency,
+                )
+              : amount;
 
           return Dismissible(
             key: ValueKey(_docs[index].id),
@@ -190,14 +227,33 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                   size: 22,
                 ),
               ),
-              title: Text(
-                CurrencyFormatter.formatWithSign(amount, type),
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: type == 'expense'
-                      ? AppTheme.warmRed
-                      : AppTheme.emeraldGreen,
-                ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    CurrencyFormatter.formatWithSign(
+                      displayAmount,
+                      type,
+                      currencyCode: _userCurrency,
+                    ),
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: type == 'expense'
+                          ? AppTheme.warmRed
+                          : AppTheme.emeraldGreen,
+                    ),
+                  ),
+                  if (transactionCurrency != _userCurrency) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      'Originally: ${CurrencyFormatter.formatWithSign(amount, type, currencyCode: transactionCurrency)}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ],
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

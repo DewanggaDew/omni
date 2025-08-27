@@ -30,6 +30,7 @@ class TransactionsRepository {
     required DateTime date,
     String? categoryId,
     String? note,
+    String? currency,
   }) async {
     final uid = _auth.currentUser!.uid;
     await _txCol(uid).add({
@@ -38,6 +39,7 @@ class TransactionsRepository {
       'date': Timestamp.fromDate(date),
       'categoryId': categoryId,
       'note': note,
+      'currency': currency ?? 'IDR', // Default to IDR if not specified
       'createdAt': FieldValue.serverTimestamp(),
     });
   }

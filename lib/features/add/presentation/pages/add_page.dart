@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omni/features/transactions/data/transactions_repository.dart';
 import 'package:omni/features/categories/data/categories_repository.dart';
 import 'package:omni/core/widgets/app_card.dart';
 import 'package:omni/core/theme/app_theme.dart';
+import 'package:omni/core/utils/currency_formatter.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -21,12 +24,43 @@ class _AddPageState extends State<AddPage> {
   bool _loading = false;
   bool _saveAndAddAnother = false;
   DateTime _date = DateTime.now();
+  String _selectedCurrency = 'IDR';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserCurrency();
+  }
 
   @override
   void dispose() {
     _amountController.dispose();
     _noteController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadUserCurrency() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          final data = userDoc.data();
+          if (data != null && data['currency'] != null) {
+            setState(() {
+              _selectedCurrency = data['currency'] as String;
+            });
+          }
+        }
+      } catch (e) {
+        // Use default currency if loading fails
+        debugPrint('Failed to load user currency: $e');
+      }
+    }
   }
 
   Future<void> _save() async {
@@ -43,6 +77,7 @@ class _AddPageState extends State<AddPage> {
         note: _noteController.text.trim().isEmpty
             ? null
             : _noteController.text.trim(),
+        currency: _selectedCurrency,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -101,7 +136,7 @@ class _AddPageState extends State<AddPage> {
                           controller: _amountController,
                           decoration: _buildInputDecoration(
                             context,
-                            'Amount',
+                            'Amount ($_selectedCurrency)',
                             'e.g. 12.50',
                           ),
                           style: _buildTextStyle(context),
