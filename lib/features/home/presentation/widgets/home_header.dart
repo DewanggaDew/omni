@@ -1,12 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:omni/core/theme/app_theme.dart';
 import 'package:omni/core/theme/theme_cubit.dart';
+import 'package:omni/core/utils/currency_formatter.dart';
+import 'package:omni/core/services/currency_exchange_service.dart';
 
-class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+class HomeHeader extends StatefulWidget {
+  const HomeHeader({super.key, this.onRefreshCallbackReady});
+
+  final ValueChanged<VoidCallback>? onRefreshCallbackReady;
+
+  @override
+  State<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> {
+  String _userCurrency = 'IDR';
+  int _todayTotal = 0;
+  int _monthTotal = 0;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSummaryData();
+
+    // Register the refresh callback with the parent
+    widget.onRefreshCallbackReady?.call(refresh);
+  }
+
+  Future<void> _loadSummaryData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      // Load user currency preference
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        if (data != null && data['currency'] != null) {
+          _userCurrency = data['currency'] as String;
+        }
+      }
+
+      // Load expenses - get all expenses first, then filter by date
+      final expenseQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions')
+          .where('type', isEqualTo: 'expense')
+          .get();
+
+      // Calculate totals with currency conversion
+      int todayTotal = 0;
+      int monthTotal = 0;
+
+      final now = DateTime.now();
+      final todayStart = DateTime(now.year, now.month, now.day);
+      final todayEnd = todayStart.add(const Duration(days: 1));
+      final monthStart = DateTime(now.year, now.month, 1);
+      final monthEnd = DateTime(now.year, now.month + 1, 1);
+
+      for (final doc in expenseQuery.docs) {
+        final data = doc.data();
+        final amount = (data['amount'] as int?) ?? 0;
+        final transactionCurrency = (data['currency'] as String?) ?? 'IDR';
+        final timestamp = (data['date'] as Timestamp?);
+
+        if (timestamp == null) continue;
+        final transactionDate = timestamp.toDate();
+
+        final convertedAmount = transactionCurrency != _userCurrency
+            ? CurrencyExchangeService.convert(
+                amountMinor: amount,
+                fromCurrency: transactionCurrency,
+                toCurrency: _userCurrency,
+              )
+            : amount;
+
+        // Since expenses are stored as negative values, we need the absolute value for summary
+        final absAmount = convertedAmount.abs();
+
+        // Check if transaction is today
+        if (transactionDate.isAfter(todayStart) &&
+            transactionDate.isBefore(todayEnd)) {
+          todayTotal += absAmount;
+        }
+
+        // Check if transaction is this month
+        if (transactionDate.isAfter(monthStart) &&
+            transactionDate.isBefore(monthEnd)) {
+          monthTotal += absAmount;
+        }
+      }
+
+      setState(() {
+        _todayTotal = todayTotal;
+        _monthTotal = monthTotal;
+        _loading = false;
+      });
+    } catch (e) {
+      debugPrint('Error loading summary data: $e');
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
+
+  /// Public method to refresh the summary data
+  /// Can be called from parent widgets to update the header
+  void refresh() {
+    _loadSummaryData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,13 +321,56 @@ class HomeHeader extends StatelessWidget {
   Widget _buildSpendingSummary(BuildContext context) {
     final theme = Theme.of(context);
 
+    if (_loading) {
+      return Row(
+        children: [
+          Expanded(
+            child: _SummaryCard(
+              title: 'Today',
+              amount: '--',
+              subtitle: 'Loading...',
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: AppTheme.space16),
+          Expanded(
+            child: _SummaryCard(
+              title: 'This month',
+              amount: '--',
+              subtitle: 'Loading...',
+              color: theme.colorScheme.secondary,
+            ),
+          ),
+        ],
+      );
+    }
+
+    final todayFormatted = _todayTotal > 0
+        ? CurrencyFormatter.formatCompact(
+            _todayTotal,
+            currencyCode: _userCurrency,
+          )
+        : CurrencyFormatter.format(0, currencyCode: _userCurrency);
+
+    final monthFormatted = _monthTotal > 0
+        ? CurrencyFormatter.formatCompact(
+            _monthTotal,
+            currencyCode: _userCurrency,
+          )
+        : CurrencyFormatter.format(0, currencyCode: _userCurrency);
+
+    final todaySubtitle = _todayTotal > 0 ? 'Spent today' : 'No expenses yet';
+    final monthSubtitle = _monthTotal > 0
+        ? 'Spent this month'
+        : 'No expenses this month';
+
     return Row(
       children: [
         Expanded(
           child: _SummaryCard(
             title: 'Today',
-            amount: 'IDR 0',
-            subtitle: 'No expenses yet',
+            amount: todayFormatted,
+            subtitle: todaySubtitle,
             color: theme.colorScheme.primary,
           ),
         ),
@@ -223,8 +378,8 @@ class HomeHeader extends StatelessWidget {
         Expanded(
           child: _SummaryCard(
             title: 'This month',
-            amount: 'IDR 0',
-            subtitle: 'vs IDR 0 budget',
+            amount: monthFormatted,
+            subtitle: monthSubtitle,
             color: theme.colorScheme.secondary,
           ),
         ),
@@ -257,6 +412,20 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+
+    // Determine text size based on amount length for better responsive design
+    final isLongAmount = amount.length > 10;
+    final amountTextStyle = isLongAmount
+        ? theme.textTheme.headlineSmall?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
+          )
+        : theme.textTheme.headlineMedium?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+          );
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.space20),
@@ -294,12 +463,14 @@ class _SummaryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppTheme.space8),
-          Text(
-            amount,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              amount,
+              style: amountTextStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(height: AppTheme.space4),

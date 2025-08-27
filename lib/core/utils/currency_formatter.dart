@@ -57,15 +57,27 @@ class CurrencyFormatter {
     int amountMinor, {
     String? currencyCode,
     String? locale,
+    bool showSymbol = true,
   }) {
     final currency = currencyCode ?? _defaultCurrency;
     final localeCode = locale ?? _defaultLocale;
     final amount = amountMinor / 100.0;
 
+    // For smaller amounts (under 100K), use regular formatting
+    if (amount.abs() < 100000) {
+      return format(
+        amountMinor,
+        currencyCode: currencyCode,
+        locale: locale,
+        showSymbol: showSymbol,
+      );
+    }
+
     try {
+      final symbol = showSymbol ? getCurrencySymbol(currency) : '';
       final formatter = NumberFormat.compactCurrency(
         locale: localeCode,
-        symbol: currency,
+        symbol: symbol,
         decimalDigits: 1,
       );
 

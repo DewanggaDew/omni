@@ -50,10 +50,7 @@ class AppCard extends StatelessWidget {
                       color: AppTheme.darkGrey.withOpacity(0.3),
                       width: 0.5,
                     )
-                  : Border.all(
-                      color: AppTheme.softGrey.withOpacity(0.15),
-                      width: 0.5,
-                    ),
+                  : null,
             ),
             child: child,
           ),

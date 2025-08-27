@@ -7,8 +7,24 @@ import 'package:omni/features/home/presentation/widgets/home_header.dart';
 import 'package:omni/core/theme/app_theme.dart';
 import 'package:omni/core/widgets/app_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  VoidCallback? _refreshCallback;
+
+  Future<void> _navigateToAddTransaction() async {
+    final result = await context.push('/add');
+
+    // If a transaction was successfully added, refresh the home page
+    if (result == true && mounted) {
+      _refreshCallback?.call();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +34,13 @@ class HomePage extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: HomeHeader()),
+          SliverToBoxAdapter(
+            child: HomeHeader(
+              onRefreshCallbackReady: (callback) {
+                _refreshCallback = callback;
+              },
+            ),
+          ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(
               AppTheme.space24,
@@ -94,7 +116,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
         child: FloatingActionButton.extended(
-          onPressed: () => context.push('/add'),
+          onPressed: _navigateToAddTransaction,
           elevation: 0,
           backgroundColor: AppTheme.vibrantBlue,
           foregroundColor: AppTheme.pureWhite,

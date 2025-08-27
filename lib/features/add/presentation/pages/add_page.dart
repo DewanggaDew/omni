@@ -90,7 +90,7 @@ class _AddPageState extends State<AddPage> {
           _type = 'expense';
         });
       } else {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(true); // Return true to indicate success
       }
     } finally {
       if (mounted) setState(() => _loading = false);
