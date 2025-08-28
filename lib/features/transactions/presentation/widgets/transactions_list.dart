@@ -294,16 +294,21 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
               ),
               trailing: PopupMenuButton<String>(
                 icon: Icon(Icons.more_vert, color: theme.colorScheme.outline),
-                onSelected: (value) {
+                onSelected: (value) async {
                   if (value == 'edit') {
-                    Navigator.of(context).push(
+                    final result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>
                             TransactionDetailPage(id: _docs[index].id),
                       ),
                     );
+                    // Refresh the list if the transaction was updated
+                    if (result == true && mounted) {
+                      refresh();
+                    }
                   } else if (value == 'duplicate') {
-                    TransactionsRepository().duplicate(_docs[index].id);
+                    await TransactionsRepository().duplicate(_docs[index].id);
+                    refresh(); // Refresh after duplicate
                   } else if (value == 'delete') {
                     _deleteAt(index);
                   }
@@ -314,11 +319,17 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                   PopupMenuItem(value: 'delete', child: Text('Delete')),
                 ],
               ),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TransactionDetailPage(id: _docs[index].id),
-                ),
-              ),
+              onTap: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => TransactionDetailPage(id: _docs[index].id),
+                  ),
+                );
+                // Refresh the list if the transaction was updated
+                if (result == true && mounted) {
+                  refresh();
+                }
+              },
             ),
           );
         },

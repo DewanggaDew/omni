@@ -84,7 +84,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
 
     // Success haptic feedback
     HapticFeedback.lightImpact();
-    Navigator.of(context).pop();
+    // Return true to indicate that the transaction was updated
+    Navigator.of(context).pop(true);
   }
 
   Future<void> _duplicate() async {
@@ -92,7 +93,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
     setState(() => _loading = true);
     await TransactionsRepository().duplicate(widget.id);
     if (!mounted) return;
-    Navigator.of(context).pop();
+    // Return true to indicate that a transaction was created
+    Navigator.of(context).pop(true);
   }
 
   @override

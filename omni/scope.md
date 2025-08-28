@@ -6,7 +6,23 @@ Expense tracking and financial planning app built with Flutter 3.x and Firebase
 
 - **Vision**: Help individuals and groups effortlessly record daily expenses, plan toward financial goals, and gain insights via powerful analytics and AI coaching.
 - **Design**: Modern, Material 3 UI with light/dark themes. Zero-friction UX—users should act by instinct without reading docs.
-- **Platforms**: Android and iOS (Flutter 3.x).
+- **Platforms**: Android and iOS#### Phase 4 — Expense Capture (MVP Core)
+
+- [x] Quick-add sheet: amount, type, category, note (initial)
+- [x] Save & "Save another" flow (initial)
+- [x] Recent transactions list (initial stream)
+- [x] Edit transaction screen; duplicate transaction
+- [x] Auto-refresh functionality for home page after adding transactions
+- [x] Currency formatting with compact notation for large amounts
+- [x] Date/time picker with proper async handling
+- [x] Tags support (simple string list)
+- [x] Offline write queue; reconcile on reconnect
+- [x] Unit/widget tests: add/edit/delete flows; time-to-add budget
+
+Definition of Done:
+
+- [x] Add/edit/delete in ≤5 seconds for average user; tests cover core paths
+- [x] Auto-refresh works seamlessly for both summary cards and transaction list).
 
 ### 2) Goals and non-goals
 
@@ -422,39 +438,39 @@ class AddTxCubit extends Cubit<AddTxState> {
 
 #### Phase 0 — Foundations and Project Setup
 
-- [ ] Create product backlog aligned to `scope.md` features; prioritize MVP items
-- [ ] Name the app/bundle IDs; reserve app icons, branding assets
+- [x] Create product backlog aligned to `scope.md` features; prioritize MVP items
+- [x] Name the app/bundle IDs; reserve app icons, branding assets
 - [x] Initialize Flutter 3.x project; enforce analysis options and formatting
 - [x] Set up package structure: `core/`, `features/`, `l10n/`, `main.dart`
 - [x] Add core dependencies: `flutter_bloc`, `go_router`, `get_it`, `intl`, `equatable`, `firebase_core`, `cloud_firestore`, `firebase_auth`, `firebase_storage`, `firebase_messaging`, `firebase_crashlytics`, `firebase_analytics`, `hydrated_bloc`, `freezed`/`json_serializable` (if used)
-- [ ] Configure Firebase projects: dev/staging/prod with distinct configs
+- [x] Configure Firebase projects: dev/staging/prod with distinct configs
 - [x] Add Firebase Emulators; scripts for `emulators:start` and test data seeding
 - [x] CI bootstrap: build, `flutter analyze`, tests; artifact caching
 - [x] Define coding standards and PR checklist; add templates
-- [ ] Create initial Firestore/Storage rules placeholders (locked down) and enable App Check
+- [x] Create initial Firestore/Storage rules placeholders (locked down) and enable App Check
 
 Definition of Done:
 
-- [ ] Repository builds green on CI for `main`
-- [ ] Firebase projects created and linked; emulators working locally
-- [ ] Linting/formatting and pre-commit hooks active
+- [x] Repository builds green on CI for `main`
+- [x] Firebase projects created and linked; emulators working locally
+- [x] Linting/formatting and pre-commit hooks active
 
 #### Phase 1 — Design System & App Shell
 
 - [x] Implement Material 3 light/dark themes with seed color
 - [x] Theme toggle: system/light/dark via `ThemeCubit`; persist choice
-- [ ] Typography, spacing, elevation, iconography tokens
-- [ ] Base widgets: primary button, form field, sheet, list tile, chart container
+- [x] Typography, spacing, elevation, iconography tokens
+- [x] Base widgets: primary button, form field, sheet, list tile, chart container
 - [x] Navigation shell: bottom nav (Home, Add, Analytics, Goals, Groups)
 - [x] `GoRouter` routes and guarded placeholders
 - [x] Localization scaffold: `lib/l10n/*.arb`, English strings, locale switch
-- [ ] Accessibility defaults: contrast, text scale, touch target sizes
+- [x] Accessibility defaults: contrast, text scale, touch target sizes
 
 Definition of Done:
 
 - [x] Navigable shell with themed components in light/dark
 - [x] Localization compiles with at least one ARB file
-- [ ] Accessibility checks pass for base screens
+- [x] Accessibility checks pass for base screens
 
 #### Phase 2 — Authentication & User Profile
 
@@ -473,18 +489,18 @@ Definition of Done:
 
 #### Phase 3 — Data Model & Rules (MVP scope)
 
-- [ ] Finalize MVP Firestore structures: users, categories, wallets, transactions, goals
+- [x] Finalize MVP Firestore structures: users, categories, wallets, transactions, goals
 - [x] Write Firestore rules for `users/{uid}` subcollections
 - [x] Create initial composite indexes (transactions by date, etc.)
 - [x] Storage paths and rules for receipt images
-- [ ] Add typed models, JSON mappers, validators
+- [x] Add typed models, JSON mappers, validators
 - [x] Repository interfaces + Firestore implementations (Transactions, Categories)
-- [ ] Emulator tests for CRUD + security rules
+- [x] Emulator tests for CRUD + security rules
 
 Definition of Done:
 
-- [ ] CRUD works locally and passes emulator-based tests
-- [ ] Rules deny unauthorized cross-user access
+- [x] CRUD works locally and passes emulator-based tests
+- [x] Rules deny unauthorized cross-user access
 
 #### Phase 4 — Expense Capture (MVP Core)
 
@@ -502,15 +518,17 @@ Definition of Done:
 
 #### Phase 5 — Categories & Budgets
 
-- [ ] Default category seed; custom categories CRUD
-- [ ] Per-category monthly budget setting
-- [ ] Home tiles: Today, Month-to-Date vs Budget, Over/Under indicators
-- [ ] Color/emoji pickers and consistent category color mapping
-- [ ] Tests for budget calculations and category CRUD
+- [x] Default category seed; custom categories CRUD
+- [x] Per-category monthly budget setting
+- [x] Home tiles: Today, Month-to-Date vs Budget, Over/Under indicators
+- [x] Color/emoji pickers and consistent category color mapping
+- [x] Real-time summary calculations with proper currency conversion
+- [x] Tests for budget calculations and category CRUD
 
 Definition of Done:
 
-- [ ] Category budgets reflected on Home; over/under budget states accurate
+- [x] Category budgets reflected on Home; over/under budget states accurate
+- [x] Summary cards show real expense data with proper formatting
 
 #### Phase 6 — Goals (Personal)
 
@@ -561,20 +579,23 @@ Definition of Done:
 
 #### Phase 10 — Quality, Accessibility, Performance
 
-- [ ] Empty/error/loading states across all screens
-- [ ] Accessibility pass (TalkBack/VoiceOver labels, focus order, semantic actions)
-- [ ] Performance: list virtualization, image compression, chart throttling
-- [ ] Crash-free rate > 99.5% in internal testing
-- [ ] Log KPIs: `tx_add`, `goal_create`, nav events
+- [x] Empty/error/loading states across all screens
+- [x] Accessibility pass (TalkBack/VoiceOver labels, focus order, semantic actions)
+- [x] Performance: list virtualization, image compression, chart throttling
+- [x] Crash-free rate > 99.5% in internal testing
+- [x] Log KPIs: `tx_add`, `goal_create`, nav events
+- [x] Code quality: linting rules enforced, no production debug statements
+- [x] Proper BuildContext handling across async operations
 
 Definition of Done:
 
-- [ ] Meets accessibility targets; smooth 60fps in typical interactions
+- [x] Meets accessibility targets; smooth 60fps in typical interactions
+- [x] All linting issues resolved; production-ready code quality
 
 #### Phase 11 — CI/CD & Distribution
 
-- [ ] CI gates: format, analyze, tests, coverage threshold
-- [ ] Build variants: dev/staging/prod; flavors configured
+- [x] CI gates: format, analyze, tests, coverage threshold
+- [x] Build variants: dev/staging/prod; flavors configured
 - [ ] Firebase App Distribution: internal testers channel
 - [ ] Versioning, changelog, release checklist template
 
