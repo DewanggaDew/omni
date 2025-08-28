@@ -89,14 +89,32 @@ class _AddPageState extends State<AddPage> {
           _type = 'expense';
         });
       } else {
-        print(
-          'DEBUG: Add page - transaction saved successfully, returning true',
-        );
         Navigator.of(context).pop(true); // Return true to indicate success
       }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  Future<void> _showDateTimePicker() async {
+    final d = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (d == null || !mounted) return;
+
+    final t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_date),
+    );
+    if (!mounted) return;
+
+    setState(() {
+      final time = t ?? TimeOfDay.fromDateTime(_date);
+      _date = DateTime(d.year, d.month, d.day, time.hour, time.minute);
+    });
   }
 
   @override
@@ -238,27 +256,7 @@ class _AddPageState extends State<AddPage> {
                       _buildFormField(
                         child: InkWell(
                           onTap: () async {
-                            final d = await showDatePicker(
-                              context: context,
-                              initialDate: _date,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                            );
-                            if (d == null) return;
-                            final t = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(_date),
-                            );
-                            setState(() {
-                              final time = t ?? TimeOfDay.fromDateTime(_date);
-                              _date = DateTime(
-                                d.year,
-                                d.month,
-                                d.day,
-                                time.hour,
-                                time.minute,
-                              );
-                            });
+                            await _showDateTimePicker();
                           },
                           borderRadius: BorderRadius.circular(AppTheme.radiusS),
                           child: Container(

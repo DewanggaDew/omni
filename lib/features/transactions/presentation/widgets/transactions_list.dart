@@ -51,6 +51,9 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
     super.initState();
     _loadUserCurrency();
     _load();
+
+    // Register the refresh callback with the parent
+    widget.onRefreshCallbackReady?.call(refresh);
   }
 
   Future<void> _loadUserCurrency() async {
@@ -97,6 +100,12 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
       _hasMore = snap.docs.length >= 20;
       _loadingMore = false;
     });
+  }
+
+  /// Public method to refresh the transactions list
+  /// Can be called from parent widgets to update the list
+  void refresh() {
+    _load();
   }
 
   Future<void> _deleteAt(int index) async {
@@ -260,7 +269,9 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                     Text(
                       'Originally: ${CurrencyFormatter.formatWithSign(amount, type, currencyCode: transactionCurrency)}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                         fontStyle: FontStyle.italic,
                       ),
                     ),

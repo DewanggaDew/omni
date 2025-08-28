@@ -19,19 +19,12 @@ class _HomePageState extends State<HomePage> {
   VoidCallback? _transactionsListRefreshCallback;
 
   Future<void> _navigateToAddTransaction() async {
-    print('DEBUG: Navigating to add transaction page');
     final result = await context.push('/add');
-    print('DEBUG: Returned from add page with result: $result');
 
     // If a transaction was successfully added, refresh both the header and transactions list
     if (result == true && mounted) {
-      print('DEBUG: Calling refresh callbacks');
       _homeHeaderRefreshCallback?.call();
       _transactionsListRefreshCallback?.call();
-    } else {
-      print(
-        'DEBUG: No refresh needed. Result: $result, Mounted: $mounted, HasHeaderCallback: ${_homeHeaderRefreshCallback != null}, HasListCallback: ${_transactionsListRefreshCallback != null}',
-      );
     }
   }
 
@@ -46,7 +39,6 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: HomeHeader(
               onRefreshCallbackReady: (callback) {
-                print('DEBUG: HomePage received HomeHeader refresh callback');
                 _homeHeaderRefreshCallback = callback;
               },
             ),

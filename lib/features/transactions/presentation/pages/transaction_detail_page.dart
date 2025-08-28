@@ -631,6 +631,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
     );
 
     if (date == null) return;
+    if (!mounted) return;
 
     final time = await showTimePicker(
       context: context,
@@ -647,6 +648,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
       },
     );
 
+    if (!mounted) return;
     setState(() {
       final selectedTime = time ?? TimeOfDay.fromDateTime(_date);
       _date = DateTime(

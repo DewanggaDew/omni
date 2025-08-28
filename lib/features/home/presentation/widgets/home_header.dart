@@ -27,6 +27,8 @@ class _HomeHeaderState extends State<HomeHeader> {
   void initState() {
     super.initState();
     _loadSummaryData();
+
+    // Register the refresh callback with the parent
     widget.onRefreshCallbackReady?.call(refresh);
   }
 
