@@ -148,8 +148,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
                   boxShadow: [
                     BoxShadow(
                       color: isDark
-                          ? AppTheme.deepBlack.withOpacity(0.6)
-                          : AppTheme.deepBlack.withOpacity(0.08),
+                          ? AppTheme.deepBlack.withValues(alpha: 0.6)
+                          : AppTheme.deepBlack.withValues(alpha: 0.08),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -205,24 +205,26 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
         borderRadius: BorderRadius.circular(AppTheme.radiusM),
         border: isPrimary
             ? null
-            : Border.all(color: theme.colorScheme.outline.withOpacity(0.1)),
+            : Border.all(
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
+              ),
         boxShadow: [
           if (isPrimary) ...[
             BoxShadow(
-              color: AppTheme.vibrantBlue.withOpacity(0.4),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.4),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
             BoxShadow(
-              color: AppTheme.vibrantBlue.withOpacity(0.2),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.2),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
           ] else ...[
             BoxShadow(
               color: isDark
-                  ? AppTheme.deepBlack.withOpacity(0.3)
-                  : AppTheme.deepBlack.withOpacity(0.04),
+                  ? AppTheme.deepBlack.withValues(alpha: 0.3)
+                  : AppTheme.deepBlack.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -236,7 +238,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
           icon,
           color: isPrimary
               ? AppTheme.pureWhite
-              : theme.colorScheme.onSurface.withOpacity(0.8),
+              : theme.colorScheme.onSurface.withValues(alpha: 0.8),
           size: 20,
         ),
       ),
@@ -260,8 +262,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
                 ),
                 decoration: BoxDecoration(
                   color: _type == 'expense'
-                      ? AppTheme.warmRed.withOpacity(0.1)
-                      : AppTheme.emeraldGreen.withOpacity(0.1),
+                      ? AppTheme.warmRed.withValues(alpha: 0.1)
+                      : AppTheme.emeraldGreen.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppTheme.radiusS),
                 ),
                 child: Text(
@@ -287,7 +289,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               color: isDark ? AppTheme.darkGrey : AppTheme.offWhite,
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: Border.all(
-                color: theme.colorScheme.outline.withOpacity(0.1),
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
             child: Row(
@@ -349,7 +351,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               vertical: AppTheme.space4,
             ),
             decoration: BoxDecoration(
-              color: AppTheme.vibrantBlue.withOpacity(0.1),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppTheme.radiusS),
             ),
             child: Text(
@@ -411,27 +413,27 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
         padding: const EdgeInsets.all(AppTheme.space20),
         decoration: BoxDecoration(
           color: isSelected
-              ? color.withOpacity(0.1)
+              ? color.withValues(alpha: 0.1)
               : (isDark ? AppTheme.charcoalBlack : AppTheme.offWhite),
           borderRadius: BorderRadius.circular(AppTheme.radiusM),
           border: Border.all(
             color: isSelected
-                ? color.withOpacity(0.4)
-                : theme.colorScheme.outline.withOpacity(0.1),
+                ? color.withValues(alpha: 0.4)
+                : theme.colorScheme.outline.withValues(alpha: 0.1),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
             if (isSelected) ...[
               BoxShadow(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha: 0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
             ] else ...[
               BoxShadow(
                 color: isDark
-                    ? AppTheme.deepBlack.withOpacity(0.2)
-                    : AppTheme.deepBlack.withOpacity(0.03),
+                    ? AppTheme.deepBlack.withValues(alpha: 0.2)
+                    : AppTheme.deepBlack.withValues(alpha: 0.03),
                 blurRadius: 4,
                 offset: const Offset(0, 1),
               ),
@@ -445,15 +447,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               padding: const EdgeInsets.all(AppTheme.space8),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? color.withOpacity(0.15)
-                    : theme.colorScheme.outline.withOpacity(0.1),
+                    ? color.withValues(alpha: 0.15)
+                    : theme.colorScheme.outline.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(AppTheme.radiusS),
               ),
               child: Icon(
                 icon,
                 color: isSelected
                     ? color
-                    : theme.colorScheme.onSurface.withOpacity(0.6),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 size: 24,
               ),
             ),
@@ -463,7 +465,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               style: theme.textTheme.titleMedium?.copyWith(
                 color: isSelected
                     ? color
-                    : theme.colorScheme.onSurface.withOpacity(0.8),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: 0.2,
               ),
@@ -489,7 +491,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               vertical: AppTheme.space4,
             ),
             decoration: BoxDecoration(
-              color: AppTheme.vibrantBlue.withOpacity(0.1),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppTheme.radiusS),
             ),
             child: Text(
@@ -508,7 +510,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               color: isDark ? AppTheme.darkGrey : AppTheme.offWhite,
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: Border.all(
-                color: theme.colorScheme.outline.withOpacity(0.1),
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
             child: Row(
@@ -516,7 +518,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
                 Container(
                   padding: const EdgeInsets.all(AppTheme.space8),
                   decoration: BoxDecoration(
-                    color: AppTheme.vibrantBlue.withOpacity(0.1),
+                    color: AppTheme.vibrantBlue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusS),
                   ),
                   child: Icon(
@@ -537,7 +539,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
                 ),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   size: 16,
                 ),
               ],
@@ -562,7 +564,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               vertical: AppTheme.space4,
             ),
             decoration: BoxDecoration(
-              color: AppTheme.vibrantBlue.withOpacity(0.1),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppTheme.radiusS),
             ),
             child: Text(
@@ -581,7 +583,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               color: isDark ? AppTheme.darkGrey : AppTheme.offWhite,
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: Border.all(
-                color: theme.colorScheme.outline.withOpacity(0.1),
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
             child: TextFormField(
@@ -590,7 +592,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage>
               decoration: InputDecoration(
                 hintText: 'Add details about this transaction...',
                 hintStyle: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   height: 1.4,
                 ),
                 border: InputBorder.none,

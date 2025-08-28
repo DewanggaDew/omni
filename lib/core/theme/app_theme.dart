@@ -63,11 +63,11 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: _buildTextTheme(Brightness.light),
       scaffoldBackgroundColor: pureWhite,
-      splashColor: vibrantBlue.withOpacity(0.08),
-      highlightColor: vibrantBlue.withOpacity(0.04),
+      splashColor: vibrantBlue.withValues(alpha: 0.08),
+      highlightColor: vibrantBlue.withValues(alpha: 0.04),
       cardTheme: CardThemeData(
         elevation: 2,
-        shadowColor: deepBlack.withOpacity(0.08),
+        shadowColor: deepBlack.withValues(alpha: 0.08),
         surfaceTintColor: Colors.transparent,
         color: pureWhite,
         shape: RoundedRectangleBorder(
@@ -105,7 +105,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: vibrantBlue,
-          side: BorderSide(color: softGrey.withOpacity(0.3)),
+          side: BorderSide(color: softGrey.withValues(alpha: 0.3)),
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
             vertical: space16,
@@ -118,26 +118,30 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: pureWhite,
         elevation: 8,
-        indicatorColor: vibrantBlue.withOpacity(0.1),
+        indicatorColor: vibrantBlue.withValues(alpha: 0.1),
         surfaceTintColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? vibrantBlue : charcoalBlack.withOpacity(0.6),
+            color: isSelected
+                ? vibrantBlue
+                : charcoalBlack.withValues(alpha: 0.6),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected ? vibrantBlue : charcoalBlack.withOpacity(0.6),
+            color: isSelected
+                ? vibrantBlue
+                : charcoalBlack.withValues(alpha: 0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
         }),
       ),
       dividerTheme: DividerThemeData(
-        color: softGrey.withOpacity(0.2),
+        color: softGrey.withValues(alpha: 0.2),
         thickness: 0.5,
         space: space16,
       ),
@@ -145,7 +149,7 @@ class AppTheme {
         backgroundColor: pureWhite,
         surfaceTintColor: Colors.transparent,
         elevation: 16,
-        shadowColor: deepBlack.withOpacity(0.12),
+        shadowColor: deepBlack.withValues(alpha: 0.12),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
         ),
@@ -154,7 +158,7 @@ class AppTheme {
         backgroundColor: pureWhite,
         surfaceTintColor: Colors.transparent,
         elevation: 24,
-        shadowColor: deepBlack.withOpacity(0.12),
+        shadowColor: deepBlack.withValues(alpha: 0.12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
         ),
@@ -174,8 +178,8 @@ class AppTheme {
           horizontal: space16,
           vertical: space16,
         ),
-        hintStyle: TextStyle(color: charcoalBlack.withOpacity(0.5)),
-        labelStyle: TextStyle(color: charcoalBlack.withOpacity(0.7)),
+        hintStyle: TextStyle(color: charcoalBlack.withValues(alpha: 0.5)),
+        labelStyle: TextStyle(color: charcoalBlack.withValues(alpha: 0.7)),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -209,17 +213,17 @@ class AppTheme {
         tertiary: emeraldGreen,
         error: warmRed,
         outline: softGrey,
-        surfaceVariant: darkGrey,
-        onSurfaceVariant: lightTone.withOpacity(0.8),
+        surfaceContainerHighest: darkGrey,
+        onSurfaceVariant: lightTone.withValues(alpha: 0.8),
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: _buildTextTheme(Brightness.dark),
       scaffoldBackgroundColor: deepBlack,
-      splashColor: pureWhite.withOpacity(0.06),
-      highlightColor: pureWhite.withOpacity(0.03),
+      splashColor: pureWhite.withValues(alpha: 0.06),
+      highlightColor: pureWhite.withValues(alpha: 0.03),
       cardTheme: CardThemeData(
         elevation: 8,
-        shadowColor: deepBlack.withOpacity(0.8),
+        shadowColor: deepBlack.withValues(alpha: 0.8),
         surfaceTintColor: Colors.transparent,
         color: charcoalBlack,
         shape: RoundedRectangleBorder(
@@ -275,14 +279,14 @@ class AppTheme {
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? vibrantBlue : lightTone.withOpacity(0.6),
+            color: isSelected ? vibrantBlue : lightTone.withValues(alpha: 0.6),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected ? vibrantBlue : lightTone.withOpacity(0.6),
+            color: isSelected ? vibrantBlue : lightTone.withValues(alpha: 0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
@@ -297,7 +301,7 @@ class AppTheme {
         backgroundColor: charcoalBlack,
         surfaceTintColor: Colors.transparent,
         elevation: 24,
-        shadowColor: deepBlack.withOpacity(0.9),
+        shadowColor: deepBlack.withValues(alpha: 0.9),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
         ),
@@ -306,7 +310,7 @@ class AppTheme {
         backgroundColor: charcoalBlack,
         surfaceTintColor: Colors.transparent,
         elevation: 32,
-        shadowColor: deepBlack.withOpacity(0.9),
+        shadowColor: deepBlack.withValues(alpha: 0.9),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
         ),
@@ -326,8 +330,8 @@ class AppTheme {
           horizontal: space16,
           vertical: space16,
         ),
-        hintStyle: TextStyle(color: lightTone.withOpacity(0.5)),
-        labelStyle: TextStyle(color: lightTone.withOpacity(0.7)),
+        hintStyle: TextStyle(color: lightTone.withValues(alpha: 0.5)),
+        labelStyle: TextStyle(color: lightTone.withValues(alpha: 0.7)),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -352,12 +356,12 @@ class AppTheme {
         : lightTone;
 
     final subtleColor = brightness == Brightness.light
-        ? charcoalBlack.withOpacity(0.8)
-        : lightTone.withOpacity(0.8);
+        ? charcoalBlack.withValues(alpha: 0.8)
+        : lightTone.withValues(alpha: 0.8);
 
     final secondaryColor = brightness == Brightness.light
-        ? charcoalBlack.withOpacity(0.6)
-        : lightTone.withOpacity(0.6);
+        ? charcoalBlack.withValues(alpha: 0.6)
+        : lightTone.withValues(alpha: 0.6);
 
     final base = GoogleFonts.interTextTheme();
 

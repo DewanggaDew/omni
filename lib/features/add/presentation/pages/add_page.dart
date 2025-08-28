@@ -6,7 +6,6 @@ import 'package:omni/features/transactions/data/transactions_repository.dart';
 import 'package:omni/features/categories/data/categories_repository.dart';
 import 'package:omni/core/widgets/app_card.dart';
 import 'package:omni/core/theme/app_theme.dart';
-import 'package:omni/core/utils/currency_formatter.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -160,7 +159,7 @@ class _AddPageState extends State<AddPage> {
                       // Type Field
                       _buildFormField(
                         child: DropdownButtonFormField<String>(
-                          value: _type,
+                          initialValue: _type,
                           items: [
                             DropdownMenuItem(
                               value: 'expense',
@@ -184,7 +183,9 @@ class _AddPageState extends State<AddPage> {
                           style: _buildTextStyle(context),
                           icon: Icon(
                             Icons.keyboard_arrow_down_rounded,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.6,
+                            ),
                           ),
                         ),
                       ),
@@ -196,7 +197,7 @@ class _AddPageState extends State<AddPage> {
                           builder: (context, snapshot) {
                             final cats = snapshot.data ?? const [];
                             return DropdownButtonFormField<String>(
-                              value: _categoryId,
+                              initialValue: _categoryId,
                               items: [
                                 DropdownMenuItem(
                                   value: null,
@@ -224,8 +225,8 @@ class _AddPageState extends State<AddPage> {
                               style: _buildTextStyle(context),
                               icon: Icon(
                                 Icons.keyboard_arrow_down_rounded,
-                                color: theme.colorScheme.onSurface.withValues(alpha: 
-                                  0.6,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.6,
                                 ),
                               ),
                             );
@@ -267,8 +268,8 @@ class _AddPageState extends State<AddPage> {
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: theme.colorScheme.outline.withValues(alpha: 
-                                  0.5,
+                                color: theme.colorScheme.outline.withValues(
+                                  alpha: 0.5,
                                 ),
                                 width: 1,
                               ),
@@ -302,8 +303,9 @@ class _AddPageState extends State<AddPage> {
                                 ),
                                 Icon(
                                   Icons.calendar_today_rounded,
-                                  color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.6),
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                                   size: 20,
                                 ),
                               ],
@@ -389,8 +391,8 @@ class _AddPageState extends State<AddPage> {
                           disabledForegroundColor: theme.colorScheme.primary
                               .withValues(alpha: 0.6),
                           side: BorderSide(
-                            color: theme.colorScheme.primary.withValues(alpha: 
-                              _loading ? 0.3 : 0.6,
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: _loading ? 0.3 : 0.6,
                             ),
                             width: 1.5,
                           ),
@@ -406,8 +408,8 @@ class _AddPageState extends State<AddPage> {
                             Icon(
                               Icons.add_rounded,
                               size: 20,
-                              color: theme.colorScheme.primary.withValues(alpha: 
-                                _loading ? 0.6 : 1.0,
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: _loading ? 0.6 : 1.0,
                               ),
                             ),
                             const SizedBox(width: AppTheme.space8),
@@ -415,8 +417,8 @@ class _AddPageState extends State<AddPage> {
                               'Save & Add Another',
                               style: theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.primary.withValues(alpha: 
-                                  _loading ? 0.6 : 1.0,
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: _loading ? 0.6 : 1.0,
                                 ),
                                 fontSize: 15,
                               ),

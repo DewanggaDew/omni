@@ -235,7 +235,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.charcoalBlack : AppTheme.offWhite,
         borderRadius: BorderRadius.circular(AppTheme.radiusL),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.1)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         children: [
@@ -243,7 +245,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppTheme.vibrantBlue.withOpacity(0.1),
+              color: AppTheme.vibrantBlue.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -268,7 +270,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                 Text(
                   user?.email ?? '',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -301,7 +303,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppTheme.radiusS),
                         borderSide: BorderSide(
-                          color: theme.colorScheme.outline.withOpacity(0.3),
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.3,
+                          ),
                         ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
@@ -428,7 +432,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
             color: isDark ? AppTheme.charcoalBlack : AppTheme.offWhite,
             borderRadius: BorderRadius.circular(AppTheme.radiusM),
             border: Border.all(
-              color: theme.colorScheme.outline.withOpacity(0.1),
+              color: theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
           child: Row(
@@ -436,7 +440,9 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
               Container(
                 padding: const EdgeInsets.all(AppTheme.space8),
                 decoration: BoxDecoration(
-                  color: (titleColor ?? AppTheme.vibrantBlue).withOpacity(0.1),
+                  color: (titleColor ?? AppTheme.vibrantBlue).withValues(
+                    alpha: 0.1,
+                  ),
                   borderRadius: BorderRadius.circular(AppTheme.radiusS),
                 ),
                 child: Icon(
@@ -464,8 +470,8 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                           Text(
                             subtitle,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.7,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
                               ),
                             ),
                           ),
@@ -540,7 +546,7 @@ class _CurrencyPickerSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: theme.colorScheme.outline.withOpacity(0.3),
+                color: theme.colorScheme.outline.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -603,13 +609,13 @@ class _CurrencyPickerSheet extends StatelessWidget {
             padding: const EdgeInsets.all(AppTheme.space16),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppTheme.vibrantBlue.withOpacity(0.1)
+                  ? AppTheme.vibrantBlue.withValues(alpha: 0.1)
                   : (isDark ? AppTheme.charcoalBlack : AppTheme.offWhite),
               borderRadius: BorderRadius.circular(AppTheme.radiusM),
               border: Border.all(
                 color: isSelected
-                    ? AppTheme.vibrantBlue.withOpacity(0.3)
-                    : theme.colorScheme.outline.withOpacity(0.1),
+                    ? AppTheme.vibrantBlue.withValues(alpha: 0.3)
+                    : theme.colorScheme.outline.withValues(alpha: 0.1),
               ),
             ),
             child: Row(
@@ -619,8 +625,8 @@ class _CurrencyPickerSheet extends StatelessWidget {
                   height: 40,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.vibrantBlue.withOpacity(0.1)
-                        : theme.colorScheme.outline.withOpacity(0.1),
+                        ? AppTheme.vibrantBlue.withValues(alpha: 0.1)
+                        : theme.colorScheme.outline.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusS),
                   ),
                   child: Center(
@@ -629,7 +635,9 @@ class _CurrencyPickerSheet extends StatelessWidget {
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: isSelected
                             ? AppTheme.vibrantBlue
-                            : theme.colorScheme.onSurface.withOpacity(0.7),
+                            : theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -652,7 +660,9 @@ class _CurrencyPickerSheet extends StatelessWidget {
                       Text(
                         currency['name']!,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ],
@@ -700,7 +710,7 @@ class _ThemeSelectorSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: theme.colorScheme.outline.withOpacity(0.3),
+                color: theme.colorScheme.outline.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -781,13 +791,13 @@ class _ThemeSelectorSheet extends StatelessWidget {
           padding: const EdgeInsets.all(AppTheme.space16),
           decoration: BoxDecoration(
             color: isSelected
-                ? AppTheme.vibrantBlue.withOpacity(0.1)
+                ? AppTheme.vibrantBlue.withValues(alpha: 0.1)
                 : (isDark ? AppTheme.charcoalBlack : AppTheme.offWhite),
             borderRadius: BorderRadius.circular(AppTheme.radiusM),
             border: Border.all(
               color: isSelected
-                  ? AppTheme.vibrantBlue.withOpacity(0.3)
-                  : theme.colorScheme.outline.withOpacity(0.1),
+                  ? AppTheme.vibrantBlue.withValues(alpha: 0.3)
+                  : theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
           child: Row(
@@ -796,15 +806,15 @@ class _ThemeSelectorSheet extends StatelessWidget {
                 padding: const EdgeInsets.all(AppTheme.space8),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppTheme.vibrantBlue.withOpacity(0.1)
-                      : theme.colorScheme.outline.withOpacity(0.1),
+                      ? AppTheme.vibrantBlue.withValues(alpha: 0.1)
+                      : theme.colorScheme.outline.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppTheme.radiusS),
                 ),
                 child: Icon(
                   icon,
                   color: isSelected
                       ? AppTheme.vibrantBlue
-                      : theme.colorScheme.onSurface.withOpacity(0.7),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   size: 20,
                 ),
               ),
@@ -827,7 +837,9 @@ class _ThemeSelectorSheet extends StatelessWidget {
                     Text(
                       subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],
