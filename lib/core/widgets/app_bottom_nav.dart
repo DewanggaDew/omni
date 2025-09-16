@@ -11,15 +11,12 @@ class AppBottomNav extends StatelessWidget {
         context.go('/');
         break;
       case 1:
-        context.push('/add');
-        break;
-      case 2:
         context.go('/analytics');
         break;
-      case 3:
+      case 2:
         context.go('/goals');
         break;
-      case 4:
+      case 3:
         context.go('/groups');
         break;
     }
@@ -35,11 +32,6 @@ class AppBottomNav extends StatelessWidget {
           icon: Icon(Icons.home_outlined),
           selectedIcon: Icon(Icons.home),
           label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.add_circle_outline),
-          selectedIcon: Icon(Icons.add_circle),
-          label: 'Add',
         ),
         NavigationDestination(
           icon: Icon(Icons.pie_chart_outline),

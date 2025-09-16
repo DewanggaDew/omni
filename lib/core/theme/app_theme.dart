@@ -49,11 +49,11 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: vibrantBlue,
+        seedColor: warmRed,
         brightness: Brightness.light,
         surface: offWhite,
         onSurface: charcoalBlack,
-        primary: vibrantBlue,
+        primary: warmRed,
         onPrimary: pureWhite,
         secondary: richPurple,
         tertiary: emeraldGreen,
@@ -63,8 +63,8 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: _buildTextTheme(Brightness.light),
       scaffoldBackgroundColor: pureWhite,
-      splashColor: vibrantBlue.withValues(alpha: 0.08),
-      highlightColor: vibrantBlue.withValues(alpha: 0.04),
+      splashColor: warmRed.withValues(alpha: 0.08),
+      highlightColor: warmRed.withValues(alpha: 0.04),
       cardTheme: CardThemeData(
         elevation: 2,
         shadowColor: deepBlack.withValues(alpha: 0.08),
@@ -77,7 +77,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: vibrantBlue,
+          backgroundColor: warmRed,
           foregroundColor: pureWhite,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
@@ -91,7 +91,7 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: vibrantBlue,
+          backgroundColor: warmRed,
           foregroundColor: pureWhite,
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -104,7 +104,7 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: vibrantBlue,
+          foregroundColor: warmRed,
           side: BorderSide(color: softGrey.withValues(alpha: 0.3)),
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -117,24 +117,20 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: pureWhite,
-        elevation: 8,
-        indicatorColor: vibrantBlue.withValues(alpha: 0.1),
+        elevation: 0,
+        indicatorColor: warmRed.withValues(alpha: 0.08),
         surfaceTintColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected
-                ? vibrantBlue
-                : charcoalBlack.withValues(alpha: 0.6),
+            color: isSelected ? warmRed : charcoalBlack.withValues(alpha: 0.6),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected
-                ? vibrantBlue
-                : charcoalBlack.withValues(alpha: 0.6),
+            color: isSelected ? warmRed : charcoalBlack.withValues(alpha: 0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
@@ -172,7 +168,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide(color: vibrantBlue, width: 2),
+          borderSide: BorderSide(color: warmRed, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: space16,
@@ -203,11 +199,11 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: vibrantBlue,
+        seedColor: warmRed,
         brightness: Brightness.dark,
         surface: charcoalBlack,
         onSurface: lightTone,
-        primary: vibrantBlue,
+        primary: warmRed,
         onPrimary: pureWhite,
         secondary: richPurple,
         tertiary: emeraldGreen,
@@ -233,7 +229,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: vibrantBlue,
+          backgroundColor: warmRed,
           foregroundColor: pureWhite,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
@@ -247,7 +243,7 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: vibrantBlue,
+          backgroundColor: warmRed,
           foregroundColor: pureWhite,
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -260,7 +256,7 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: vibrantBlue,
+          foregroundColor: warmRed,
           side: BorderSide(color: darkGrey),
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -273,20 +269,20 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: richBlack,
-        elevation: 12,
+        elevation: 0,
         indicatorColor: darkGrey,
         surfaceTintColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? vibrantBlue : lightTone.withValues(alpha: 0.6),
+            color: isSelected ? warmRed : lightTone.withValues(alpha: 0.6),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected ? vibrantBlue : lightTone.withValues(alpha: 0.6),
+            color: isSelected ? warmRed : lightTone.withValues(alpha: 0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
@@ -324,7 +320,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide(color: vibrantBlue, width: 2),
+          borderSide: BorderSide(color: warmRed, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: space16,

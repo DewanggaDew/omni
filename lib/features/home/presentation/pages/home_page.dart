@@ -103,41 +103,13 @@ class _HomePageState extends State<HomePage> {
           const SliverToBoxAdapter(child: SizedBox(height: AppTheme.space24)),
         ],
       ),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.vibrantBlue.withValues(alpha: 0.4),
-              blurRadius: 20,
-              spreadRadius: 0,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: AppTheme.vibrantBlue.withValues(alpha: 0.4),
-              blurRadius: 40,
-              spreadRadius: 0,
-              offset: const Offset(0, 16),
-            ),
-          ],
-        ),
-        child: FloatingActionButton.extended(
-          onPressed: _navigateToAddTransaction,
-          elevation: 0,
-          backgroundColor: AppTheme.vibrantBlue,
-          foregroundColor: AppTheme.pureWhite,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.radiusL),
-          ),
-          icon: const Icon(Icons.add_rounded, size: 24),
-          label: Text(
-            'Add',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: AppTheme.pureWhite,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToAddTransaction,
+        elevation: 0,
+        backgroundColor: AppTheme.pureWhite,
+        foregroundColor: AppTheme.deepBlack,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add_rounded, size: 24),
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 0),
     );

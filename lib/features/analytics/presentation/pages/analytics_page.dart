@@ -9,7 +9,7 @@ class AnalyticsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Analytics')),
       body: const Center(child: Text('Analytics Placeholder')),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 2),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1),
     );
   }
 }

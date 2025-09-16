@@ -183,10 +183,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _docs.length,
-        separatorBuilder: (_, __) => Divider(
-          height: 1,
-          color: theme.colorScheme.outline.withValues(alpha: 0.1),
-        ),
+        separatorBuilder: (_, __) => const SizedBox(height: AppTheme.space8),
         itemBuilder: (context, index) {
           final tx = _docs[index].data();
           final amount = (tx['amount'] as int?) ?? 0;
@@ -219,34 +216,14 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                 horizontal: AppTheme.space20,
                 vertical: AppTheme.space8,
               ),
-              leading: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color:
-                      (type == 'expense'
-                              ? AppTheme.warmRed
-                              : AppTheme.emeraldGreen)
-                          .withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
-                  border: Border.all(
-                    color:
-                        (type == 'expense'
-                                ? AppTheme.warmRed
-                                : AppTheme.emeraldGreen)
-                            .withValues(alpha: 0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Icon(
-                  type == 'expense'
-                      ? Icons.trending_down_rounded
-                      : Icons.trending_up_rounded,
-                  color: type == 'expense'
-                      ? AppTheme.warmRed
-                      : AppTheme.emeraldGreen,
-                  size: 22,
-                ),
+              leading: Icon(
+                type == 'expense'
+                    ? Icons.remove_circle_outline
+                    : Icons.add_circle_outline,
+                color: type == 'expense'
+                    ? AppTheme.warmRed
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                size: 22,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,7 +238,7 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
                       fontWeight: FontWeight.w600,
                       color: type == 'expense'
                           ? AppTheme.warmRed
-                          : AppTheme.emeraldGreen,
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                   if (transactionCurrency != _userCurrency) ...[

@@ -136,34 +136,7 @@ class _HomeHeaderState extends State<HomeHeader> {
           AppTheme.space24,
           AppTheme.space40,
         ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              theme.colorScheme.primary.withValues(alpha: 0.05),
-              theme.colorScheme.surface,
-            ],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isDark
-                  ? AppTheme.deepBlack.withValues(alpha: 0.6)
-                  : AppTheme.deepBlack.withValues(alpha: 0.08),
-              blurRadius: 24,
-              spreadRadius: 0,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: isDark
-                  ? AppTheme.deepBlack.withValues(alpha: 0.3)
-                  : AppTheme.deepBlack.withValues(alpha: 0.04),
-              blurRadius: 48,
-              spreadRadius: 0,
-              offset: const Offset(0, 16),
-            ),
-          ],
-        ),
+        color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -197,51 +170,29 @@ class _HomeHeaderState extends State<HomeHeader> {
                 ),
                 Row(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? AppTheme.charcoalBlack
-                            : AppTheme.offWhite,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: theme.colorScheme.outline.withValues(
-                            alpha: 0.1,
-                          ),
+                    IconButton(
+                      onPressed: () => _showThemeSelector(context),
+                      icon: Icon(
+                        isDark
+                            ? Icons.light_mode_rounded
+                            : Icons.dark_mode_rounded,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
                         ),
                       ),
-                      child: IconButton(
-                        onPressed: () => _showThemeSelector(context),
-                        icon: Icon(
-                          isDark
-                              ? Icons.light_mode_rounded
-                              : Icons.dark_mode_rounded,
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.8,
-                          ),
-                        ),
-                        iconSize: 20,
-                        tooltip: 'Change theme',
-                      ),
+                      iconSize: 20,
+                      tooltip: 'Change theme',
                     ),
-                    const SizedBox(width: AppTheme.space8),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? AppTheme.charcoalBlack
-                            : AppTheme.offWhite,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: theme.colorScheme.outline.withValues(
-                            alpha: 0.1,
-                          ),
+                    IconButton(
+                      onPressed: () => context.go('/settings'),
+                      icon: Icon(
+                        Icons.person_outline_rounded,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
                         ),
                       ),
-                      child: IconButton(
-                        onPressed: () => context.go('/settings'),
-                        icon: const Icon(Icons.person_outline_rounded),
-                        iconSize: 20,
-                        tooltip: 'Settings',
-                      ),
+                      iconSize: 20,
+                      tooltip: 'Settings',
                     ),
                   ],
                 ),

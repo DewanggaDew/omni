@@ -9,7 +9,7 @@ class GroupsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Groups')),
       body: const Center(child: Text('Groups Placeholder')),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 4),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

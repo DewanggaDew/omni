@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import '../../../../core/widgets/app_bottom_nav.dart';
 import '../../domain/entities/goal.dart';
@@ -106,7 +105,7 @@ class _GoalsPageContent extends StatelessWidget {
           return _buildGoalsList(context, goals);
         },
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 2),
     );
   }
 
