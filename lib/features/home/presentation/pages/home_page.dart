@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:omni/features/transactions/presentation/widgets/transactions_list.dart';
 import 'package:omni/core/widgets/app_bottom_nav.dart';
 import 'package:omni/features/home/presentation/widgets/home_header.dart';
 import 'package:omni/core/theme/app_theme.dart';
 import 'package:omni/core/widgets/app_card.dart';
+import 'package:omni/features/add/presentation/widgets/add_transaction_sheet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +19,12 @@ class _HomePageState extends State<HomePage> {
   VoidCallback? _transactionsListRefreshCallback;
 
   Future<void> _navigateToAddTransaction() async {
-    final result = await context.push('/add');
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => const AddTransactionSheet(),
+    );
 
     // If a transaction was successfully added, refresh both the header and transactions list
     if (result == true && mounted) {
@@ -90,12 +95,17 @@ class _HomePageState extends State<HomePage> {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppTheme.space24),
             sliver: SliverToBoxAdapter(
-              child: AppCard(
-                padding: EdgeInsets.zero,
-                child: TransactionsList(
-                  onRefreshCallbackReady: (callback) {
-                    _transactionsListRefreshCallback = callback;
-                  },
+              child: SizedBox(
+                // Constrain height to create an internal scroll for the list
+                height: 480,
+                child: AppCard(
+                  padding: EdgeInsets.zero,
+                  child: TransactionsList(
+                    scrollable: true,
+                    onRefreshCallbackReady: (callback) {
+                      _transactionsListRefreshCallback = callback;
+                    },
+                  ),
                 ),
               ),
             ),
@@ -105,9 +115,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddTransaction,
-        elevation: 0,
-        backgroundColor: AppTheme.pureWhite,
-        foregroundColor: AppTheme.deepBlack,
+        elevation: theme.brightness == Brightness.light ? 2 : 0,
+        backgroundColor: theme.brightness == Brightness.light
+            ? AppTheme.deepBlack
+            : AppTheme.pureWhite,
+        foregroundColor: theme.brightness == Brightness.light
+            ? AppTheme.pureWhite
+            : AppTheme.deepBlack,
         shape: const CircleBorder(),
         child: const Icon(Icons.add_rounded, size: 24),
       ),

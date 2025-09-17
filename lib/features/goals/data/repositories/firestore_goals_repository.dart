@@ -52,6 +52,7 @@ class FirestoreGoalsRepository implements GoalsRepository {
         .collection('goals')
         .doc(goal.id)
         .update(goalModel.toMap());
+    // If goalType changed or linked categories updated, consider recomputing progress
   }
 
   @override
@@ -120,13 +121,29 @@ class FirestoreGoalsRepository implements GoalsRepository {
 
       if (type == 'income') {
         totalAmount += amount;
-      } else {
+      } else if (type == 'expense') {
         totalAmount -= amount; // Subtract expenses
       }
     }
 
-    // For savings goals, we want the net positive amount (income - expenses)
-    return totalAmount > 0 ? totalAmount : 0;
+    // Determine goal type to apply correct logic
+    final goal = await getGoal(goalId);
+    final goalType = goal?.goalType ?? 'saving';
+    if (goalType == 'saving') {
+      // Savings progress: only incomes should contribute positively
+      return totalAmount > 0 ? totalAmount : 0;
+    } else {
+      // Budget tracking: treat expenses as progress towards limit (absolute value of expenses)
+      // Sum only expenses for linked categories in the month
+      double expenseTotal = 0;
+      for (final doc in transactionsQuery.docs) {
+        final data = doc.data();
+        final amount = (data['amount'] as num).toDouble();
+        final type = data['type'] as String;
+        if (type == 'expense') expenseTotal += amount;
+      }
+      return expenseTotal;
+    }
   }
 
   String _getCurrentUserId() {

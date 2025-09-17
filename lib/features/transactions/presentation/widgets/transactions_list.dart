@@ -8,9 +8,14 @@ import 'package:omni/core/utils/currency_formatter.dart';
 import 'package:omni/core/services/currency_exchange_service.dart';
 
 class TransactionsList extends StatelessWidget {
-  const TransactionsList({super.key, this.onRefreshCallbackReady});
+  const TransactionsList({
+    super.key,
+    this.onRefreshCallbackReady,
+    this.scrollable = false,
+  });
 
   final ValueChanged<VoidCallback>? onRefreshCallbackReady;
+  final bool scrollable;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,7 @@ class TransactionsList extends StatelessWidget {
       query: query,
       repo: repo,
       onRefreshCallbackReady: onRefreshCallbackReady,
+      scrollable: scrollable,
     );
   }
 }
@@ -29,11 +35,13 @@ class _PagedTransactionsList extends StatefulWidget {
     required this.query,
     required this.repo,
     this.onRefreshCallbackReady,
+    this.scrollable = false,
   });
 
   final Query<Map<String, dynamic>> query;
   final TransactionsRepository repo;
   final ValueChanged<VoidCallback>? onRefreshCallbackReady;
+  final bool scrollable;
 
   @override
   State<_PagedTransactionsList> createState() => _PagedTransactionsListState();
@@ -180,8 +188,10 @@ class _PagedTransactionsListState extends State<_PagedTransactionsList> {
         return false;
       },
       child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: !widget.scrollable,
+        physics: widget.scrollable
+            ? const BouncingScrollPhysics()
+            : const NeverScrollableScrollPhysics(),
         itemCount: _docs.length,
         separatorBuilder: (_, __) => const SizedBox(height: AppTheme.space8),
         itemBuilder: (context, index) {

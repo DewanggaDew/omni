@@ -46,7 +46,7 @@ Definition of Done:
 
 - **Zero-friction entry**: Floating “+” button; smart defaults; last-used values; one-handed use.
 - **Clear hierarchy**: Prominent daily total, month-to-date spend, and next upcoming goal milestone.
-- **Predictable navigation**: Bottom nav for Home, Add, Analytics, Goals, Groups.
+- **Predictable navigation**: Bottom nav for Home, Analytics, Goals, Groups. Global FAB opens bottom sheets.
 - **Progressive disclosure**: Show essentials first; advanced options (tags, splits, attachments) tucked away.
 - **Accessible**: Large touch targets, color contrast, dynamic type, and VoiceOver/TalkBack support.
 - **Invites to collaborate**: Human-readable group names, avatars, emoji, friendly empty states.
@@ -74,9 +74,9 @@ Definition of Done:
 ### 6) Information architecture and navigation
 
 - **Bottom navigation**
-  - Home, Add, Analytics, Goals, Groups
+  - Home, Analytics, Goals, Groups
 - **Global actions**
-  - Floating “+” for expense/income/log transfer.
+  - Floating “+” opens bottom sheets (Add Transaction, Add Goal)
   - Profile/Settings from Home top-right.
 - **Search and filters**
   - Search across transactions; filters for category, tag, date, amount, wallet, group.
@@ -88,15 +88,15 @@ Definition of Done:
 - **Home (Dashboard)**
   - Today’s spend, month-to-date spend vs budget, upcoming recurring charges, next goal milestone.
   - Quick-add and recent transactions.
-- **Add transaction sheet**
-  - Amount keypad, category chips, wallet selector, date/time, notes, tags, receipt photo, group toggle, split options.
-  - Save and “Save & add another.”
+- **Add transaction** (bottom sheet)
+  - Amount, type (expense/income), category, date/time, optional note; minimalist monochrome.
 - **Transaction detail**
   - Full info, attachments, split view (if group), edit/duplicate/delete.
 - **Categories & budgets**
   - Default set (Food, Transport, etc.); create custom; per-category monthly budgets; color and emoji pickers.
 - **Goals**
-  - List and detail pages; progress bar; expected timeline; recommended actions; link to related categories or group.
+  - List and detail pages; high-contrast monochrome cards; expected timeline; link to related categories or group.
+  - Add Goal bottom sheet: title, target amount, monochrome icon selector; Save closes and refreshes.
 - **Groups**
   - List user’s groups; group detail with members, shared expenses, settle-up, group goal(s); invite via link/QR.
 - **Analytics**
@@ -365,6 +365,8 @@ export const aiSuggest = functions.https.onCall(async (data, ctx) => {
 
 - **Material 3**: Use dynamic color (Android 12+); custom seed color otherwise.
 - **Light/Dark**: Toggle in `Settings`; default to system theme.
+- **Monochrome theme**: White/black backgrounds, black/white text; greys for borders/dividers; muted red reserved for error only.
+- **Bottom sheets**: Create flows presented as lightweight, swipe-to-dismiss sheets.
 - **Micro-interactions**: Haptic feedback on save, Lottie animation celebration on goal milestones.
 - **Charts**: Smooth, interactive; tap-to-drill down; consistent color mapping per category.
 
@@ -373,14 +375,18 @@ export const aiSuggest = functions.https.onCall(async (data, ctx) => {
 ```dart
 final lightTheme = ThemeData(
   useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3B82F6), brightness: Brightness.light),
-  visualDensity: VisualDensity.adaptivePlatformDensity,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: const Color(0xFF000000),
+    brightness: Brightness.light,
+  ),
 );
 
 final darkTheme = ThemeData(
   useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3B82F6), brightness: Brightness.dark),
-  visualDensity: VisualDensity.adaptivePlatformDensity,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: const Color(0xFFFFFFFF),
+    brightness: Brightness.dark,
+  ),
 );
 ```
 

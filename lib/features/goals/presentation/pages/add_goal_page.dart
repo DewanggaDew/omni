@@ -25,6 +25,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
   DateTime _targetDate = DateTime.now().add(const Duration(days: 365));
   String _selectedColor = '#3B82F6';
   String _selectedIcon = '🎯';
+  String _goalType = 'saving';
   bool _loading = false;
 
   final List<String> _goalIcons = [
@@ -77,6 +78,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
     _targetDate = goal.targetDate;
     _selectedColor = goal.color ?? '#3B82F6';
     _selectedIcon = goal.icon ?? '🎯';
+    _goalType = goal.goalType;
   }
 
   @override
@@ -98,8 +100,11 @@ class _AddGoalPageState extends State<AddGoalPage> {
         actions: [
           BlocConsumer<GoalsBloc, GoalsState>(
             listener: (context, state) {
-              if (state is GoalOperationSuccess) {
-                Navigator.of(context).pop();
+              if (state is GoalOperationInProgress) {
+                setState(() => _loading = true);
+              } else if (state is GoalOperationSuccess) {
+                setState(() => _loading = false);
+                Navigator.of(context).pop(true); // signal success
               } else if (state is GoalsError) {
                 setState(() => _loading = false);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -130,6 +135,19 @@ class _AddGoalPageState extends State<AddGoalPage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            DropdownButtonFormField<String>(
+              value: _goalType,
+              items: const [
+                DropdownMenuItem(value: 'saving', child: Text('Saving goal')),
+                DropdownMenuItem(value: 'budget', child: Text('Budget goal')),
+              ],
+              onChanged: (v) => setState(() => _goalType = v ?? 'saving'),
+              decoration: const InputDecoration(
+                labelText: 'Goal type',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
             // Goal Name
             TextFormField(
               controller: _nameController,
@@ -315,7 +333,9 @@ class _AddGoalPageState extends State<AddGoalPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                color: theme.colorScheme.surfaceContainerHighest.withOpacity(
+                  0.5,
+                ),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: theme.colorScheme.outline.withOpacity(0.3),
@@ -425,6 +445,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
       description: _descriptionController.text.trim().isEmpty
           ? null
           : _descriptionController.text.trim(),
+      goalType: _goalType,
       targetAmount: targetAmount,
       targetDate: _targetDate,
       linkedCategories: [], // TODO: Add category selection

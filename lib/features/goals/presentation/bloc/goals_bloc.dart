@@ -37,6 +37,7 @@ class GoalsBloc extends Bloc<GoalsEvent, GoalsState> {
        _auth = auth ?? FirebaseAuth.instance,
        super(const GoalsInitial()) {
     on<LoadGoals>(_onLoadGoals);
+    on<ReloadGoals>(_onReloadGoals);
     on<CreateGoal>(_onCreateGoal);
     on<UpdateGoal>(_onUpdateGoal);
     on<DeleteGoal>(_onDeleteGoal);
@@ -93,7 +94,9 @@ class GoalsBloc extends Bloc<GoalsEvent, GoalsState> {
         await emit.forEach<List<Goal>>(
           _getGoals(user.uid),
           onData: (goals) {
-            debugPrint('GoalsBloc: emit.forEach received ${goals.length} goals');
+            debugPrint(
+              'GoalsBloc: emit.forEach received ${goals.length} goals',
+            );
             return GoalsLoaded(goals);
           },
           onError: (error, stackTrace) {
@@ -113,61 +116,52 @@ class GoalsBloc extends Bloc<GoalsEvent, GoalsState> {
     }
   }
 
+  Future<void> _onReloadGoals(
+    ReloadGoals event,
+    Emitter<GoalsState> emit,
+  ) async {
+    // Allow manual refresh: reset the stream and load again
+    _streamInitialized = false;
+    await _onLoadGoals(const LoadGoals(), emit);
+  }
+
   Future<void> _onCreateGoal(CreateGoal event, Emitter<GoalsState> emit) async {
-    if (state is GoalsLoaded) {
-      emit(GoalOperationInProgress((state as GoalsLoaded).goals));
-    }
+    final currentGoals = state is GoalsLoaded
+        ? (state as GoalsLoaded).goals
+        : <Goal>[];
+    emit(GoalOperationInProgress(currentGoals));
 
     try {
       await _createGoal(event.goal);
-      if (state is GoalOperationInProgress) {
-        emit(
-          GoalOperationSuccess(
-            (state as GoalOperationInProgress).goals,
-            'Goal created successfully',
-          ),
-        );
-      }
+      emit(GoalOperationSuccess(currentGoals, 'Goal created successfully'));
     } catch (e) {
       emit(GoalsError(e.toString()));
     }
   }
 
   Future<void> _onUpdateGoal(UpdateGoal event, Emitter<GoalsState> emit) async {
-    if (state is GoalsLoaded) {
-      emit(GoalOperationInProgress((state as GoalsLoaded).goals));
-    }
+    final currentGoals = state is GoalsLoaded
+        ? (state as GoalsLoaded).goals
+        : <Goal>[];
+    emit(GoalOperationInProgress(currentGoals));
 
     try {
       await _updateGoal(event.goal);
-      if (state is GoalOperationInProgress) {
-        emit(
-          GoalOperationSuccess(
-            (state as GoalOperationInProgress).goals,
-            'Goal updated successfully',
-          ),
-        );
-      }
+      emit(GoalOperationSuccess(currentGoals, 'Goal updated successfully'));
     } catch (e) {
       emit(GoalsError(e.toString()));
     }
   }
 
   Future<void> _onDeleteGoal(DeleteGoal event, Emitter<GoalsState> emit) async {
-    if (state is GoalsLoaded) {
-      emit(GoalOperationInProgress((state as GoalsLoaded).goals));
-    }
+    final currentGoals = state is GoalsLoaded
+        ? (state as GoalsLoaded).goals
+        : <Goal>[];
+    emit(GoalOperationInProgress(currentGoals));
 
     try {
       await _deleteGoal(event.goalId);
-      if (state is GoalOperationInProgress) {
-        emit(
-          GoalOperationSuccess(
-            (state as GoalOperationInProgress).goals,
-            'Goal deleted successfully',
-          ),
-        );
-      }
+      emit(GoalOperationSuccess(currentGoals, 'Goal deleted successfully'));
     } catch (e) {
       emit(GoalsError(e.toString()));
     }

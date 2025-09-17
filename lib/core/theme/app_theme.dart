@@ -38,46 +38,45 @@ class AppTheme {
   static const Color offWhite = Color(0xFFF8F8F8);
   static const Color lightTone = Color(0xFFF2F2F7);
 
-  // Accent colors for contrast
-  static const Color vibrantBlue = Color(0xFF007AFF);
-  static const Color emeraldGreen = Color(0xFF30D158);
-  static const Color warmRed = Color(0xFFFF3B30);
-  static const Color goldenYellow = Color(0xFFFFCC02);
-  static const Color richPurple = Color(0xFF5856D6);
+  // Accent colors (use minimally in the new monochrome system)
+  static const Color vibrantBlue = Color(0xFF007AFF); // legacy, avoid
+  static const Color emeraldGreen = Color(0xFF30D158); // legacy, avoid
+  static const Color warmRed = Color(0xFFD93D3D); // error only
+  static const Color goldenYellow = Color(0xFFFFCC02); // legacy
+  static const Color richPurple = Color(0xFF5856D6); // legacy
 
   static ThemeData light() {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: warmRed,
+        seedColor: deepBlack,
         brightness: Brightness.light,
-        surface: offWhite,
+        surface: pureWhite,
         onSurface: charcoalBlack,
-        primary: warmRed,
+        primary: deepBlack,
         onPrimary: pureWhite,
-        secondary: richPurple,
-        tertiary: emeraldGreen,
         error: warmRed,
         outline: softGrey,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       textTheme: _buildTextTheme(Brightness.light),
       scaffoldBackgroundColor: pureWhite,
-      splashColor: warmRed.withValues(alpha: 0.08),
-      highlightColor: warmRed.withValues(alpha: 0.04),
+      splashColor: charcoalBlack.withValues(alpha: 0.06),
+      highlightColor: charcoalBlack.withValues(alpha: 0.03),
       cardTheme: CardThemeData(
-        elevation: 2,
-        shadowColor: deepBlack.withValues(alpha: 0.08),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         color: pureWhite,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusM),
+          side: BorderSide(color: Colors.black.withOpacity(0.06)),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: warmRed,
+          backgroundColor: deepBlack,
           foregroundColor: pureWhite,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
@@ -91,7 +90,7 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: warmRed,
+          backgroundColor: deepBlack,
           foregroundColor: pureWhite,
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -104,8 +103,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: warmRed,
-          side: BorderSide(color: softGrey.withValues(alpha: 0.3)),
+          foregroundColor: charcoalBlack,
+          side: BorderSide(color: Colors.black.withOpacity(0.12)),
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
             vertical: space16,
@@ -118,19 +117,23 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: pureWhite,
         elevation: 0,
-        indicatorColor: warmRed.withValues(alpha: 0.08),
+        indicatorColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? warmRed : charcoalBlack.withValues(alpha: 0.6),
+            color: isSelected
+                ? charcoalBlack
+                : charcoalBlack.withValues(alpha: 0.5),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected ? warmRed : charcoalBlack.withValues(alpha: 0.6),
+            color: isSelected
+                ? charcoalBlack
+                : charcoalBlack.withValues(alpha: 0.5),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
@@ -144,8 +147,8 @@ class AppTheme {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: pureWhite,
         surfaceTintColor: Colors.transparent,
-        elevation: 16,
-        shadowColor: deepBlack.withValues(alpha: 0.12),
+        elevation: 8,
+        shadowColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
         ),
@@ -153,29 +156,29 @@ class AppTheme {
       dialogTheme: DialogThemeData(
         backgroundColor: pureWhite,
         surfaceTintColor: Colors.transparent,
-        elevation: 24,
-        shadowColor: deepBlack.withValues(alpha: 0.12),
+        elevation: 8,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: offWhite,
+        fillColor: Colors.black.withOpacity(0.03),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.black.withOpacity(0.12)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide(color: warmRed, width: 2),
+          borderSide: BorderSide(color: charcoalBlack, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: space16,
           vertical: space16,
         ),
-        hintStyle: TextStyle(color: charcoalBlack.withValues(alpha: 0.5)),
-        labelStyle: TextStyle(color: charcoalBlack.withValues(alpha: 0.7)),
+        hintStyle: TextStyle(color: softGrey.withValues(alpha: 0.9)),
+        labelStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -199,14 +202,12 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: warmRed,
+        seedColor: pureWhite,
         brightness: Brightness.dark,
-        surface: charcoalBlack,
+        surface: richBlack,
         onSurface: lightTone,
-        primary: warmRed,
-        onPrimary: pureWhite,
-        secondary: richPurple,
-        tertiary: emeraldGreen,
+        primary: pureWhite,
+        onPrimary: deepBlack,
         error: warmRed,
         outline: softGrey,
         surfaceContainerHighest: darkGrey,
@@ -218,19 +219,20 @@ class AppTheme {
       splashColor: pureWhite.withValues(alpha: 0.06),
       highlightColor: pureWhite.withValues(alpha: 0.03),
       cardTheme: CardThemeData(
-        elevation: 8,
-        shadowColor: deepBlack.withValues(alpha: 0.8),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         color: charcoalBlack,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusM),
+          side: BorderSide(color: darkGrey),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: warmRed,
-          foregroundColor: pureWhite,
+          backgroundColor: pureWhite,
+          foregroundColor: deepBlack,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -243,8 +245,8 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: warmRed,
-          foregroundColor: pureWhite,
+          backgroundColor: pureWhite,
+          foregroundColor: deepBlack,
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
             vertical: space16,
@@ -256,7 +258,7 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: warmRed,
+          foregroundColor: lightTone,
           side: BorderSide(color: darkGrey),
           padding: const EdgeInsets.symmetric(
             horizontal: space24,
@@ -270,19 +272,19 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: richBlack,
         elevation: 0,
-        indicatorColor: darkGrey,
+        indicatorColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? warmRed : lightTone.withValues(alpha: 0.6),
+            color: isSelected ? lightTone : lightTone.withValues(alpha: 0.6),
             size: 24,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return TextStyle(
-            color: isSelected ? warmRed : lightTone.withValues(alpha: 0.6),
+            color: isSelected ? lightTone : lightTone.withValues(alpha: 0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 12,
           );
@@ -294,19 +296,19 @@ class AppTheme {
         space: space16,
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: charcoalBlack,
+        backgroundColor: richBlack,
         surfaceTintColor: Colors.transparent,
-        elevation: 24,
-        shadowColor: deepBlack.withValues(alpha: 0.9),
+        elevation: 8,
+        shadowColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(radiusXL)),
         ),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: charcoalBlack,
+        backgroundColor: richBlack,
         surfaceTintColor: Colors.transparent,
-        elevation: 32,
-        shadowColor: deepBlack.withValues(alpha: 0.9),
+        elevation: 8,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusL),
         ),
@@ -316,11 +318,11 @@ class AppTheme {
         fillColor: darkGrey,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: darkGrey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
-          borderSide: BorderSide(color: warmRed, width: 2),
+          borderSide: BorderSide(color: pureWhite, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: space16,

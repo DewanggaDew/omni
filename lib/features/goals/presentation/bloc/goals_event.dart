@@ -12,6 +12,10 @@ class LoadGoals extends GoalsEvent {
   const LoadGoals();
 }
 
+class ReloadGoals extends GoalsEvent {
+  const ReloadGoals();
+}
+
 class CreateGoal extends GoalsEvent {
   final Goal goal;
 

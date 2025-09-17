@@ -6,6 +6,7 @@ class GoalModel {
     required this.id,
     required this.userId,
     required this.name,
+    required this.goalType,
     required this.targetAmount,
     required this.targetDate,
     required this.linkedCategories,
@@ -21,6 +22,7 @@ class GoalModel {
   final String userId;
   final String name;
   final String? description;
+  final String goalType;
   final double targetAmount;
   final DateTime targetDate;
   final List<String> linkedCategories;
@@ -37,6 +39,7 @@ class GoalModel {
       userId: data['userId'] as String,
       name: data['name'] as String,
       description: data['description'] as String?,
+      goalType: (data['goalType'] as String?) ?? 'saving',
       targetAmount: (data['targetAmount'] as num).toDouble(),
       targetDate: (data['targetDate'] as Timestamp).toDate(),
       linkedCategories: List<String>.from(data['linkedCategories'] ?? []),
@@ -54,6 +57,7 @@ class GoalModel {
       userId: goal.userId,
       name: goal.name,
       description: goal.description,
+      goalType: goal.goalType,
       targetAmount: goal.targetAmount,
       targetDate: goal.targetDate,
       linkedCategories: goal.linkedCategories,
@@ -70,6 +74,7 @@ class GoalModel {
       'userId': userId,
       'name': name,
       'description': description,
+      'goalType': goalType,
       'targetAmount': targetAmount,
       'targetDate': Timestamp.fromDate(targetDate),
       'linkedCategories': linkedCategories,
@@ -87,6 +92,7 @@ class GoalModel {
       userId: userId,
       name: name,
       description: description,
+      goalType: goalType,
       targetAmount: targetAmount,
       targetDate: targetDate,
       linkedCategories: linkedCategories,

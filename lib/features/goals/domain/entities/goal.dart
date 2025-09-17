@@ -5,6 +5,7 @@ class Goal extends Equatable {
     required this.id,
     required this.userId,
     required this.name,
+    required this.goalType,
     required this.targetAmount,
     required this.targetDate,
     required this.linkedCategories,
@@ -20,6 +21,8 @@ class Goal extends Equatable {
   final String userId;
   final String name;
   final String? description;
+  // 'saving' | 'budget'
+  final String goalType;
   final double targetAmount;
   final DateTime targetDate;
   final List<String> linkedCategories;
@@ -52,6 +55,7 @@ class Goal extends Equatable {
     String? userId,
     String? name,
     String? description,
+    String? goalType,
     double? targetAmount,
     DateTime? targetDate,
     List<String>? linkedCategories,
@@ -66,6 +70,7 @@ class Goal extends Equatable {
       userId: userId ?? this.userId,
       name: name ?? this.name,
       description: description ?? this.description,
+      goalType: goalType ?? this.goalType,
       targetAmount: targetAmount ?? this.targetAmount,
       targetDate: targetDate ?? this.targetDate,
       linkedCategories: linkedCategories ?? this.linkedCategories,
@@ -83,6 +88,7 @@ class Goal extends Equatable {
     userId,
     name,
     description,
+    goalType,
     targetAmount,
     targetDate,
     linkedCategories,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,8 @@ import '../bloc/goals_event.dart';
 import '../bloc/goals_state.dart';
 import '../widgets/goal_card.dart';
 import 'add_goal_page.dart';
+import 'goal_detail_page.dart';
+import '../widgets/add_goal_sheet.dart';
 
 class GoalsPage extends StatelessWidget {
   const GoalsPage({super.key});
@@ -21,8 +24,44 @@ class GoalsPage extends StatelessWidget {
   }
 }
 
-class _GoalsPageContent extends StatelessWidget {
+class _GoalsPageContent extends StatefulWidget {
   const _GoalsPageContent();
+
+  @override
+  State<_GoalsPageContent> createState() => _GoalsPageContentState();
+}
+
+class _GoalsPageContentState extends State<_GoalsPageContent> {
+  Timer? _refreshTimer;
+  DateTime? _lastReloadAt;
+  List<Goal> _cachedGoals = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoRefresh();
+  }
+
+  void _startAutoRefresh() {
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      // Throttle to avoid spamming
+      final now = DateTime.now();
+      if (_lastReloadAt == null ||
+          now.difference(_lastReloadAt!).inSeconds > 10) {
+        _lastReloadAt = now;
+        if (mounted) {
+          context.read<GoalsBloc>().add(const ReloadGoals());
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +70,16 @@ class _GoalsPageContent extends StatelessWidget {
         title: const Text('Goals'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Refresh',
+            onPressed: () {
+              _lastReloadAt = DateTime.now();
+              context.read<GoalsBloc>().add(const ReloadGoals());
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => _navigateToAddGoal(context),
+            onPressed: () => _openAddGoalSheet(context),
           ),
         ],
       ),
@@ -52,15 +99,18 @@ class _GoalsPageContent extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
+          } else if (state is GoalsLoaded) {
+            _cachedGoals = state.goals;
+          } else if (state is GoalOperationInProgress) {
+            _cachedGoals = state.goals;
+          } else if (state is GoalOperationSuccess) {
+            _cachedGoals = state.goals;
           }
         },
         builder: (context, state) {
-          if (state is GoalsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
+          Widget content;
           if (state is GoalsError) {
-            return Center(
+            content = Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -86,23 +136,57 @@ class _GoalsPageContent extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
-                    onPressed: () {
-                      context.read<GoalsBloc>().add(const LoadGoals());
-                    },
+                    onPressed: () =>
+                        context.read<GoalsBloc>().add(const ReloadGoals()),
                     child: const Text('Retry'),
                   ),
                 ],
               ),
             );
+          } else {
+            final goals = _getGoalsFromState(state);
+            if (goals.isEmpty &&
+                _cachedGoals.isEmpty &&
+                state is GoalsLoading) {
+              content = const Center(child: CircularProgressIndicator());
+            } else if ((goals.isEmpty ? _cachedGoals : goals).isEmpty) {
+              content = _buildEmptyState(context);
+            } else {
+              final list = _buildGoalsList(
+                context,
+                goals.isEmpty ? _cachedGoals : goals,
+              );
+              // Show subtle top progress bar during background refresh
+              if (state is GoalsLoading &&
+                  (goals.isNotEmpty || _cachedGoals.isNotEmpty)) {
+                content = Column(
+                  children: const [
+                    LinearProgressIndicator(minHeight: 2),
+                    SizedBox(height: 8),
+                  ],
+                );
+                content = Column(
+                  children: [
+                    const LinearProgressIndicator(minHeight: 2),
+                    const SizedBox(height: 8),
+                    Expanded(child: list),
+                  ],
+                );
+              } else {
+                content = list;
+              }
+            }
           }
 
-          final goals = _getGoalsFromState(state);
-
-          if (goals.isEmpty) {
-            return _buildEmptyState(context);
-          }
-
-          return _buildGoalsList(context, goals);
+          return RefreshIndicator(
+            onRefresh: () async {
+              _lastReloadAt = DateTime.now();
+              context.read<GoalsBloc>().add(const ReloadGoals());
+              // Give the stream a moment to deliver
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            child: content,
+          );
         },
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 2),
@@ -147,7 +231,7 @@ class _GoalsPageContent extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             FilledButton.icon(
-              onPressed: () => _navigateToAddGoal(context),
+              onPressed: () => _openAddGoalSheet(context),
               icon: const Icon(Icons.add),
               label: const Text('Create Your First Goal'),
             ),
@@ -173,19 +257,23 @@ class _GoalsPageContent extends StatelessWidget {
     );
   }
 
-  void _navigateToAddGoal(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: GetIt.instance<GoalsBloc>(),
-          child: const AddGoalPage(),
-        ),
+  Future<void> _openAddGoalSheet(BuildContext context) async {
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => BlocProvider.value(
+        value: GetIt.instance<GoalsBloc>(),
+        child: const AddGoalSheet(),
       ),
     );
+    if (result == true && mounted) {
+      context.read<GoalsBloc>().add(const ReloadGoals());
+    }
   }
 
-  void _navigateToEditGoal(BuildContext context, Goal goal) {
-    Navigator.of(context).push(
+  Future<void> _navigateToEditGoal(BuildContext context, Goal goal) async {
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: GetIt.instance<GoalsBloc>(),
@@ -193,13 +281,31 @@ class _GoalsPageContent extends StatelessWidget {
         ),
       ),
     );
+    if (result == true && context.mounted) {
+      context.read<GoalsBloc>().add(const ReloadGoals());
+    }
   }
 
   void _navigateToGoalDetail(BuildContext context, Goal goal) {
-    // TODO: Implement goal detail page
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Goal detail page coming soon!')),
-    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => BlocProvider.value(
+              value: GetIt.instance<GoalsBloc>(),
+              child: GoalDetailPage(goal: goal),
+            ),
+          ),
+        )
+        .then((result) async {
+          if (!mounted) return;
+          if (result is Map &&
+              result['action'] == 'edit' &&
+              result['goal'] is Goal) {
+            await _navigateToEditGoal(context, result['goal'] as Goal);
+          }
+          // On delete or edit completion, refresh goals
+          context.read<GoalsBloc>().add(const ReloadGoals());
+        });
   }
 
   void _showDeleteConfirmation(BuildContext context, Goal goal) {
